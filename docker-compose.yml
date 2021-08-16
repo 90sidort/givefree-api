@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: givefree_db_postgres
+    image: postgres:13.1
+    restart: always
+    environment:
+      - POSTGRES_DB=givefree_db
+      - POSTGRES_USER=givefreeadmin
+      - POSTGRES_PASSWORD=testtest2
+    ports:
+      - 5432:5432
+    volumes:
+      - "./pg/data:/var/lib/postgresql/data"
+      - "./pg/init:/docker-entrypoint-initdb.d"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

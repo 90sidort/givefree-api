@@ -5,3 +5,5 @@ build/
 tmp/
 temp/
 pg
+images/*
+!images/.gitkeep

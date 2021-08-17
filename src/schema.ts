@@ -1,7 +1,7 @@
 import { makeExecutableSchema } from "graphql-tools";
 import { merge } from "lodash";
 
-import { userTypeDefs } from "./types/userTypes";
+import { userTypeDefs } from "./defTypes/userTypes";
 import { userResolvers } from "./resolvers/userResolver";
 
 const Query = `

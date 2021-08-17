@@ -4,13 +4,18 @@ import * as express from "express";
 import { ApolloServer } from "apollo-server-express";
 
 import { schema } from "./schema";
+import { isAuth } from "./middleware/auth";
 
 const startServer = async () => {
-  const server = new ApolloServer({ schema });
+  const server = new ApolloServer({
+    schema,
+    context: ({ req }) => ({ isAuth: req.isAuth, userId: req.userId }),
+  });
 
   await createConnection();
 
   const app = express();
+  app.use(isAuth);
 
   server.applyMiddleware({ app });
 

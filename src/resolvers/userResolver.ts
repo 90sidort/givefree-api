@@ -6,7 +6,8 @@ import { SignIn, SignUp } from "../interfaces/signInterfaces";
 
 export const userResolvers = {
   Query: {
-    getUser: async (_: any, args: any, context: any) => {
+    getUser: async (_: any, args: { id: number }, context: any) => {
+      if (!context.isAuth) throw new Error("Unauthorized!");
       const { id } = args;
       return await User.findOne({ where: { id: id } });
     },

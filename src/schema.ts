@@ -1,7 +1,9 @@
 import { makeExecutableSchema } from "graphql-tools";
 import { merge } from "lodash";
+import { itemTypeDefs } from "./defTypes/itemTypes";
 
 import { userTypeDefs } from "./defTypes/userTypes";
+import { itemResolvers } from "./resolvers/itemResolver";
 import { userResolvers } from "./resolvers/userResolver";
 
 const Query = `
@@ -19,6 +21,6 @@ const Mutation = `
 const resolvers = {};
 
 export const schema = makeExecutableSchema({
-  typeDefs: [Query, Mutation, userTypeDefs],
-  resolvers: merge(resolvers, userResolvers),
+  typeDefs: [Query, Mutation, userTypeDefs, itemTypeDefs],
+  resolvers: merge(resolvers, userResolvers, itemResolvers),
 });

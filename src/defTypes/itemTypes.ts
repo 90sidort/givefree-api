@@ -15,6 +15,7 @@ export const itemTypeDefs = gql`
     state: StateEnum!
     category: CategoryEnum!
     description: String
+    images: [File]
   }
   input ItemInput {
     name: String!

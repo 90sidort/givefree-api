@@ -5,9 +5,15 @@ export const uploadTypeDefs = gql`
     test: String!
   }
   extend type Mutation {
-    uploadFile(file: FileUpload!): File!
+    uploadFile(file: FileUpload!, image: AddImage!): File!
   }
   type File {
     url: String!
+    alt: String!
+    itemId: Int!
+  }
+  input AddImage {
+    alt: String
+    itemId: Int!
   }
 `;

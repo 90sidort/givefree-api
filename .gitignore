@@ -7,3 +7,4 @@ temp/
 pg
 images/*
 !images/.gitkeep
+!images/cheems_user.jpg

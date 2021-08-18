@@ -16,6 +16,7 @@ const startServer = async () => {
 
   const app = express();
   app.use(isAuth);
+  app.use(express.static("images"));
 
   server.applyMiddleware({ app });
 

@@ -5,8 +5,11 @@ import {
   BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
+
 import { CategoryEnum, StateEnum, StatusEnum } from "../interfaces/enums";
+import { Image } from "./Image";
 
 @Entity()
 export class Item extends BaseEntity {
@@ -35,6 +38,12 @@ export class Item extends BaseEntity {
     enum: CategoryEnum,
   })
   category: CategoryEnum;
+
+  @OneToMany(() => Image, (image) => image.item, {
+    nullable: true,
+    cascade: true,
+  })
+  images: Image[];
 
   @Column({ name: "description", length: 200, nullable: true })
   description: string;

@@ -9,6 +9,10 @@ import { isAuth } from "./middleware/auth";
 const startServer = async () => {
   const server = new ApolloServer({
     schema,
+    formatError: (error) => {
+      console.log(error);
+      return error;
+    },
     context: ({ req }) => ({ isAuth: req.isAuth, userId: req.userId }),
   });
 
@@ -18,7 +22,7 @@ const startServer = async () => {
   app.use(isAuth);
   app.use(express.static("images"));
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, path: "/graphql", cors: true });
 
   app.listen({ port: 4000 }, () =>
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)

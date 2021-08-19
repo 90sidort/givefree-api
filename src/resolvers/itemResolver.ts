@@ -8,7 +8,8 @@ export const itemResolvers = {
   StateEnum,
   Query: {
     getItems: async (_: any, args: { id: number }, context: any) => {
-      if (!context.isAuth) throw new Error("Unauthorized!");
+      console.log(context);
+      // if (!context.isAuth) throw new Error("Unauthorized!");
       const { id } = args;
       const query = id
         ? await Item.find({ where: { id }, relations: ["images"] })

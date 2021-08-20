@@ -12,8 +12,8 @@ export const itemResolvers = {
       // if (!context.isAuth) throw new Error("Unauthorized!");
       const { id } = args;
       const query = id
-        ? await Item.find({ where: { id }, relations: ["images"] })
-        : await Item.find({ relations: ["images"] });
+        ? await Item.find({ where: { id }, relations: ["images", "giver"] })
+        : await Item.find({ relations: ["images", "giver"] });
       return query;
     },
   },

@@ -24,6 +24,7 @@ export const userTypeDefs = gql`
   type User {
     id: Int!
     username: String!
+    gave: [Item]
     name: String!
     surname: String!
     email: String!

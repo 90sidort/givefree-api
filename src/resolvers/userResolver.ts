@@ -9,7 +9,7 @@ export const userResolvers = {
     getUser: async (_: any, args: { id: number }, context: any) => {
       if (!context.isAuth) throw new Error("Unauthorized!");
       const { id } = args;
-      return await User.findOne({ where: { id: id } });
+      return await User.findOne({ relations: ["gave"], where: { id } });
     },
     signinUser: async (_: any, args: SignIn) => {
       try {

@@ -5,7 +5,9 @@ import {
   BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
+import { Item } from "./Item";
 
 @Entity()
 export class User extends BaseEntity {
@@ -29,6 +31,12 @@ export class User extends BaseEntity {
 
   @Column({ name: "about", length: 2000, nullable: true })
   about: string;
+
+  @OneToMany(() => Item, (item) => item.giver, {
+    nullable: true,
+    cascade: true,
+  })
+  gave: Item[];
 
   @Column({ name: "active", default: true })
   active: boolean;

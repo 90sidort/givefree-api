@@ -14,11 +14,14 @@ export const itemTypeDefs = gql`
     status: StatusEnum!
     state: StateEnum!
     category: CategoryEnum!
+    giver: User!
+    giverId: Int!
     description: String
     images: [File]
   }
   input ItemInput {
     name: String!
+    giverId: Int!
     active: Boolean
     status: StatusEnum
     state: StateEnum

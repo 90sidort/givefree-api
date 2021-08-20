@@ -6,10 +6,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToOne,
 } from "typeorm";
 
 import { CategoryEnum, StateEnum, StatusEnum } from "../interfaces/enums";
 import { Image } from "./Image";
+import { User } from "./User";
 
 @Entity()
 export class Item extends BaseEntity {
@@ -45,8 +47,14 @@ export class Item extends BaseEntity {
   })
   images: Image[];
 
+  @ManyToOne(() => User, (user) => user.gave)
+  giver: User;
+
   @Column({ name: "description", length: 200, nullable: true })
   description: string;
+
+  @Column()
+  giverId: number;
 
   @CreateDateColumn()
   createdAt: Date;

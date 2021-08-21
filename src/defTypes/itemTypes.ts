@@ -40,7 +40,7 @@ export const itemTypeDefs = gql`
   enum StatusEnum {
     DRAFT
     DELETED
-    ONGOIND
+    ONGOING
   }
   enum StateEnum {
     NEW

@@ -11,8 +11,7 @@ export const itemResolvers = {
   StatusEnum,
   StateEnum,
   Query: {
-    getItems: async (_: any, args: { id: number }, context: any) => {
-      console.log(context);
+    getItems: async (_: any, args: { id: number }) => {
       // if (!context.isAuth) throw new Error("Unauthorized!");
       const { id } = args;
       const query = id
@@ -22,13 +21,9 @@ export const itemResolvers = {
     },
   },
   Mutation: {
-    addItem: async (
-      _: any,
-      args: { item: ItemCreate; file: any },
-      context: any
-    ) => {
+    addItem: async (_: any, args: { item: ItemCreate; file: any }) => {
       const { item, file } = args;
-      if (!context.isAuth) throw new Error("Unauthorized!");
+      // if (!context.isAuth) throw new Error("Unauthorized!");
       const { name, active, status, state, category, description, giverId } =
         item;
       try {

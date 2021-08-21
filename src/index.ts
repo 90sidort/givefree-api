@@ -4,7 +4,7 @@ import * as express from "express";
 import { ApolloServer } from "apollo-server-express";
 
 import { schema } from "./schema";
-import { isAuth } from "./middleware/auth";
+// import { isAuth } from "./middleware/auth";
 
 const startServer = async () => {
   const server = new ApolloServer({
@@ -13,13 +13,13 @@ const startServer = async () => {
       console.log(error);
       return error;
     },
-    context: ({ req }) => ({ isAuth: req.isAuth, userId: req.userId }),
+    // context: ({ req }) => ({ isAuth: req.isAuth, userId: req.userId }),
   });
 
   await createConnection();
 
   const app = express();
-  app.use(isAuth);
+  // app.use(isAuth);
   app.use(express.static("images"));
 
   server.applyMiddleware({ app, path: "/graphql", cors: true });

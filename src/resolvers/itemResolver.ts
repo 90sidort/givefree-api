@@ -1,7 +1,7 @@
 import { getConnection } from "typeorm";
 
 import { Item } from "../entity/Item";
-import { ItemCreate } from "../interfaces/itemInterfaces";
+import { ItemCreate, ItemUpdate } from "../interfaces/itemInterfaces";
 import { CategoryEnum, StatusEnum, StateEnum } from "../interfaces/enums";
 import { Image } from "../entity/Image";
 import { fileSaver } from "../utils/saveFile";
@@ -52,6 +52,24 @@ export const itemResolvers = {
           await item.save();
         }
         return item;
+      } catch (err) {
+        throw new Error(`Server error!`);
+      }
+    },
+    updateItem: async (_: any, args: { id: number; item: ItemUpdate }) => {
+      const { id, item } = args;
+      const { name, active, status, state, category, description } = item;
+      try {
+        const updateItem = await Item.findOne(id);
+        if (!updateItem) throw new Error("Item does not exist!");
+        if (name) updateItem.name = name;
+        if (active) updateItem.active = active;
+        if (status) updateItem.status = status;
+        if (state) updateItem.state = state;
+        if (category) updateItem.category = category;
+        if (description) updateItem.description = description;
+        await updateItem.save();
+        return updateItem;
       } catch (err) {
         throw new Error(`Server error!`);
       }

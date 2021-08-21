@@ -1,11 +1,15 @@
 import { CategoryEnum, StateEnum, StatusEnum } from "./enums";
 
-export interface ItemCreate {
-  name: string;
+export interface ItemUpdate {
+  name?: string;
   active?: boolean;
   status?: StatusEnum;
   state?: StateEnum;
-  category: CategoryEnum;
+  category?: CategoryEnum;
   description?: string;
+}
+export interface ItemCreate extends ItemUpdate {
   giverId: number;
+  name: string;
+  category: CategoryEnum;
 }

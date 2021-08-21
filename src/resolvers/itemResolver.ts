@@ -22,19 +22,15 @@ export const itemResolvers = {
     },
   },
   Mutation: {
-    addItem: async (_: any, args: { item: ItemCreate }, context: any) => {
-      const { item } = args;
+    addItem: async (
+      _: any,
+      args: { item: ItemCreate; file: any },
+      context: any
+    ) => {
+      const { item, file } = args;
       if (!context.isAuth) throw new Error("Unauthorized!");
-      const {
-        name,
-        active,
-        status,
-        state,
-        category,
-        description,
-        file,
-        giverId,
-      } = item;
+      const { name, active, status, state, category, description, giverId } =
+        item;
       try {
         const item = Item.create({
           name,

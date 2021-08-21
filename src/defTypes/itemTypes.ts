@@ -5,7 +5,7 @@ export const itemTypeDefs = gql`
     getItems(id: Int): [Item]
   }
   extend type Mutation {
-    addItem(item: ItemInput!): Item!
+    addItem(item: ItemInput!, file: FileUpload): Item!
   }
   type Item {
     id: Int!
@@ -27,7 +27,6 @@ export const itemTypeDefs = gql`
     state: StateEnum
     category: CategoryEnum!
     description: String
-    file: FileUpload
   }
   enum StatusEnum {
     DRAFT

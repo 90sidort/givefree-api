@@ -7,6 +7,5 @@ export interface ItemCreate {
   state?: StateEnum;
   category: CategoryEnum;
   description?: string;
-  file: any;
   giverId: number;
 }

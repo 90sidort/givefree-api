@@ -27,6 +27,7 @@ export const itemTypeDefs = gql`
     state: StateEnum
     category: CategoryEnum!
     description: String
+    file: FileUpload
   }
   enum StatusEnum {
     DRAFT

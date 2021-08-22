@@ -74,5 +74,19 @@ export const itemResolvers = {
         throw new Error(`Server error!`);
       }
     },
+    deleteItem: async (_: any, args: { id: number }) => {
+      const { id } = args;
+      try {
+        const deleteItem = await Item.findOne(id);
+        if (!deleteItem) throw new Error("Item does not exist!");
+        if (deleteItem.status === "given")
+          throw new Error("Cannot delete archived item!");
+        const returnItem = { ...deleteItem };
+        await deleteItem.remove();
+        return returnItem;
+      } catch (err) {
+        throw new Error(`Server error!`);
+      }
+    },
   },
 };

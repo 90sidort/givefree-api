@@ -50,7 +50,7 @@ export class Item extends BaseEntity {
   @ManyToOne(() => User, (user) => user.gave)
   giver: User;
 
-  @Column({ name: "description", length: 200, nullable: true })
+  @Column({ name: "description", length: 600, nullable: true })
   description: string;
 
   @Column()

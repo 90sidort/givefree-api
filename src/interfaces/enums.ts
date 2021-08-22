@@ -22,6 +22,6 @@ export enum CategoryEnum {
 
 export enum StatusEnum {
   DRAFT = "draft",
-  DELETED = "deleted",
+  GIVEN = "given",
   ONGOING = "ongoing",
 }

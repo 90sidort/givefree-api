@@ -11,27 +11,34 @@ export const itemResolvers = {
   StatusEnum,
   StateEnum,
   Query: {
+    getItem: async (_: any, args: { id: number }) => {
+      const { id } = args;
+      try {
+        const item = await Item.findOne(id, { relations: ["images", "giver"] });
+        if (!item) throw new Error("Item not found");
+        return item;
+      } catch (err) {
+        throw new Error(`Server error!`);
+      }
+    },
     getItems: async (
       _: any,
-      args: { id: number; skip: number; first: number }
+      args: { skip: number; first: number; status: string }
     ) => {
       // if (!context.isAuth) throw new Error("Unauthorized!");
-      const { id, skip, first } = args;
-      console.log(skip, first);
-      let query;
-      if (id) {
-        query = await Item.find({
-          where: { id },
-          relations: ["images", "giver"],
-        });
-      } else {
-        query = await Item.find({
+      const { skip, first } = args;
+      try {
+        const items = await Item.find({
           skip: skip || undefined,
           take: first || undefined,
+          order: { updatedAt: "DESC" },
           relations: ["images", "giver"],
         });
+        if (!items) throw new Error("Items not found");
+        return items;
+      } catch (err) {
+        throw new Error(`Server error!`);
       }
-      return query;
     },
     countItems: async (_: any) => {
       return await Item.count();

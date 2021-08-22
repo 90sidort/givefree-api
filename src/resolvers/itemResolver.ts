@@ -11,13 +11,30 @@ export const itemResolvers = {
   StatusEnum,
   StateEnum,
   Query: {
-    getItems: async (_: any, args: { id: number }) => {
+    getItems: async (
+      _: any,
+      args: { id: number; skip: number; first: number }
+    ) => {
       // if (!context.isAuth) throw new Error("Unauthorized!");
-      const { id } = args;
-      const query = id
-        ? await Item.find({ where: { id }, relations: ["images", "giver"] })
-        : await Item.find({ relations: ["images", "giver"] });
+      const { id, skip, first } = args;
+      console.log(skip, first);
+      let query;
+      if (id) {
+        query = await Item.find({
+          where: { id },
+          relations: ["images", "giver"],
+        });
+      } else {
+        query = await Item.find({
+          skip: skip || undefined,
+          take: first || undefined,
+          relations: ["images", "giver"],
+        });
+      }
       return query;
+    },
+    countItems: async (_: any) => {
+      return await Item.count();
     },
   },
   Mutation: {

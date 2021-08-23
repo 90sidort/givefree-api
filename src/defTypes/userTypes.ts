@@ -2,8 +2,8 @@ import { gql } from "apollo-server-express";
 
 export const userTypeDefs = gql`
   extend type Query {
+    me: User
     getUser(id: Int!): User
-    signinUser(password: String!, username: String!): AuthData!
   }
   extend type Mutation {
     signupUser(
@@ -14,12 +14,8 @@ export const userTypeDefs = gql`
       email: String!
       about: String
       active: Boolean
-    ): AuthData!
-  }
-  type AuthData {
-    userId: ID!
-    token: String!
-    tokenExpiration: Int!
+    ): Boolean!
+    signinUser(password: String!, username: String!): Boolean!
   }
   type User {
     id: Int!

@@ -6,12 +6,20 @@ import { SignIn, SignUp } from "../interfaces/signInterfaces";
 
 export const userResolvers = {
   Query: {
+    me: async (_: any, __: any, context: any) => {
+      const { req } = context;
+      if (!req.userId) return null;
+      return await User.findOne(req.userId);
+    },
     getUser: async (_: any, args: { id: number }) => {
       // if (!context.isAuth) throw new Error("Unauthorized!");
       const { id } = args;
       return await User.findOne({ relations: ["gave"], where: { id } });
     },
-    signinUser: async (_: any, args: SignIn) => {
+  },
+  Mutation: {
+    signinUser: async (_: any, args: SignIn, context: any) => {
+      const { res } = context;
       try {
         const { username, password } = args;
         const user = await User.findOne({ where: { username } });
@@ -20,26 +28,26 @@ export const userResolvers = {
         if (!matches)
           throw new Error(`Password for user ${username} is incorrect!`);
         const token = jwt.sign(
-          { userId: user.id, email: user.email },
+          { userId: user.id, username: user.username },
           "super_secret_821378",
           {
             expiresIn: "12h",
           }
         );
-        return { userId: user.id, token: token, tokenExpiration: 12 };
+        res.cookie("token", token);
+        return true;
       } catch (err) {
-        throw new Error(`Server error!`);
+        throw new Error(err ? err : "Server error!");
       }
     },
-  },
-  Mutation: {
-    signupUser: async (_: any, args: SignUp) => {
+    signupUser: async (_: any, args: SignUp, context: any) => {
+      const { res } = context;
       const { username, name, surname, email, password, about, active } = args;
       try {
         const userEmailExists = await User.findOne({ where: { email } });
         const userUsernameExists = await User.findOne({ where: { username } });
         if (userEmailExists || userUsernameExists)
-          throw new Error(`User with username ${username} `);
+          throw new Error(`User ${username} already exists!`);
         const hashedPassword = await bcrypt.hash(password, 12);
         const user = User.create({
           username,
@@ -52,13 +60,14 @@ export const userResolvers = {
         });
         await user.save();
         const token = jwt.sign(
-          { userId: user.id, email: user.email },
+          { userId: user.id, username: user.username },
           "super_secret_821378",
           {
             expiresIn: "12h",
           }
         );
-        return { userId: user.id, token: token, tokenExpiration: 12 };
+        res.cookie("token", token);
+        return true;
       } catch (error) {
         throw new Error(`Server error!`);
       }

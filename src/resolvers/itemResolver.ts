@@ -11,8 +11,7 @@ export const itemResolvers = {
   StatusEnum,
   StateEnum,
   Query: {
-    getItem: async (_: any, args: { id: number }, context: any) => {
-      console.log(context.req);
+    getItem: async (_: any, args: { id: number }) => {
       const { id } = args;
       try {
         const item = await Item.findOne(id, { relations: ["images", "giver"] });

@@ -40,6 +40,15 @@ export const userResolvers = {
         throw new Error(err ? err : "Server error!");
       }
     },
+    signout: async (_: any, __: any, context: any) => {
+      const { res } = context;
+      try {
+        res.cookie("token", "deleted");
+      } catch (err) {
+        throw new Error(err ? err : "Server error!");
+      }
+      return true;
+    },
     signupUser: async (_: any, args: SignUp, context: any) => {
       const { res } = context;
       const { username, name, surname, email, password, about, active } = args;

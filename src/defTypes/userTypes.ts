@@ -16,6 +16,7 @@ export const userTypeDefs = gql`
       active: Boolean
     ): Boolean!
     signinUser(password: String!, username: String!): Boolean!
+    signout: Boolean!
   }
   type User {
     id: Int!

@@ -14,12 +14,6 @@ const startServer = async () => {
       console.log(error);
       return error;
     },
-    // context: ({ req }) => {
-    //   return {
-    //     isAuth: req.isAuth,
-    //     userId: req.userId,
-    //   };
-    // },
     context: ({ req, res }: any) => ({ req, res }),
   });
 

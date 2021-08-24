@@ -51,8 +51,18 @@ export const userResolvers = {
     },
     signupUser: async (_: any, args: SignUp, context: any) => {
       const { res } = context;
-      const { username, name, surname, email, password, about, active } = args;
+      const {
+        username,
+        name,
+        surname,
+        email,
+        password,
+        about,
+        active,
+        retype,
+      } = args;
       try {
+        if (retype !== password) throw new Error("Passwords do not match!");
         const userEmailExists = await User.findOne({ where: { email } });
         const userUsernameExists = await User.findOne({ where: { username } });
         if (userEmailExists || userUsernameExists)
@@ -77,8 +87,8 @@ export const userResolvers = {
         );
         res.cookie("token", token);
         return true;
-      } catch (error) {
-        throw new Error(`Server error!`);
+      } catch (err) {
+        throw new Error(err ? err : "Server error!");
       }
     },
   },

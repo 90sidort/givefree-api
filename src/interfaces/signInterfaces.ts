@@ -9,6 +9,7 @@ export interface SignUp {
   surname: string;
   email: string;
   password: string;
+  retype: string;
   about?: string;
   active: boolean;
 }

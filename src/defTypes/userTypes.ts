@@ -18,6 +18,13 @@ export const userTypeDefs = gql`
     ): Boolean!
     signinUser(password: String!, username: String!): Boolean!
     signout: Boolean!
+    requestReset(email: String!): Boolean!
+    resetPassword(
+      email: String!
+      token: String!
+      password: String!
+      retype: String!
+    ): Boolean!
   }
   type User {
     id: Int!

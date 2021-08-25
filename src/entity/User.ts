@@ -41,6 +41,9 @@ export class User extends BaseEntity {
   @Column({ name: "active", default: true })
   active: boolean;
 
+  @Column({ name: "reset", default: false })
+  reset: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

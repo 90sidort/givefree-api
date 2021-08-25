@@ -4,7 +4,7 @@ export const isAuth = (req, _, next) => {
   const token = req.cookies["token"];
   let data;
   try {
-    data = jwt.verify(token, "super_secret_821378") as any;
+    data = jwt.verify(token, process.env.SECRET as string) as any;
   } catch {
     req.isAuth = false;
     return next();

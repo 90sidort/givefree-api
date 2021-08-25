@@ -3,6 +3,7 @@ import * as jwt from "jsonwebtoken";
 
 import { User } from "../entity/User";
 import { SignIn, SignUp } from "../interfaces/signInterfaces";
+import { sendResetEmail } from "../utils/mail";
 
 export const userResolvers = {
   Query: {
@@ -18,6 +19,50 @@ export const userResolvers = {
     },
   },
   Mutation: {
+    requestReset: async (_: any, args: { email: string }) => {
+      const { email } = args;
+      try {
+        const user = await User.findOne({ where: { email } });
+        if (!user) throw new Error(`User with email: ${email} does not exist!`);
+        user.reset = true;
+        await user.save();
+        const token = jwt.sign(
+          { userId: user.id, username: user.username },
+          process.env.SECRET as string,
+          {
+            expiresIn: 60 * 5,
+          }
+        );
+        await sendResetEmail(token, email);
+        return true;
+      } catch (err) {
+        throw new Error(err ? err : "Server error!");
+      }
+    },
+    resetPassword: async (
+      _: any,
+      args: { email: string; token: string; password: string; retype: string }
+    ) => {
+      try {
+        const { email, token, password, retype } = args;
+        if (password !== retype) throw new Error(`Passwords do not match`);
+        const match = jwt.verify(token, process.env.SECRET as string);
+        if (!match) throw new Error(`Invalid token`);
+        const user = await User.findOne({ where: { email } });
+        if (!user) throw new Error(`User with email: ${email} does not exist!`);
+        if (!user.reset)
+          throw new Error(
+            `User with email: ${email} did not request password reset!`
+          );
+        const hashedPassword = await bcrypt.hash(password, 12);
+        user.password = hashedPassword;
+        user.reset = false;
+        user.save();
+        return true;
+      } catch (err) {
+        throw new Error(err ? err : "Server error!");
+      }
+    },
     signinUser: async (_: any, args: SignIn, context: any) => {
       const { res } = context;
       try {
@@ -29,7 +74,7 @@ export const userResolvers = {
           throw new Error(`Password for user ${username} is incorrect!`);
         const token = jwt.sign(
           { userId: user.id, username: user.username },
-          "super_secret_821378",
+          process.env.SECRET as string,
           {
             expiresIn: "12h",
           }
@@ -80,7 +125,7 @@ export const userResolvers = {
         await user.save();
         const token = jwt.sign(
           { userId: user.id, username: user.username },
-          "super_secret_821378",
+          process.env.SECRET as string,
           {
             expiresIn: "12h",
           }

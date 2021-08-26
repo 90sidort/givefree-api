@@ -9,7 +9,9 @@ export const wishlistResolvers = {
     getWishlist: async (_: any, args: { userId: number }) => {
       const { userId } = args;
       try {
-        const wishlist = await User.findOne(userId, { relations: ["wishes"] });
+        const wishlist = await User.findOne(userId, {
+          relations: ["wishes", "wishes.images"],
+        });
         if (!wishlist) throw new Error("User not found!");
         return wishlist.wishes;
       } catch (err) {

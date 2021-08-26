@@ -86,6 +86,8 @@ export const itemResolvers = {
       try {
         const updateItem = await Item.findOne(id);
         if (!updateItem) throw new Error("Item does not exist!");
+        if (updateItem.status === StatusEnum.GIVEN)
+          throw new Error("Item alread given!");
         if (name) updateItem.name = name;
         if (active) updateItem.active = active;
         if (status) updateItem.status = status;

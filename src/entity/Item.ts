@@ -7,6 +7,8 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToOne,
+  JoinTable,
+  ManyToMany,
 } from "typeorm";
 
 import { CategoryEnum, StateEnum, StatusEnum } from "../interfaces/enums";
@@ -50,11 +52,24 @@ export class Item extends BaseEntity {
   @ManyToOne(() => User, (user) => user.gave)
   giver: User;
 
+  @ManyToOne(() => User, (user) => user.taken, { nullable: true })
+  taker: User;
+
+  @ManyToMany(() => User, (user) => user.wishes, {
+    nullable: true,
+    cascade: true,
+  })
+  @JoinTable()
+  wishers: User[];
+
   @Column({ name: "description", length: 600, nullable: true })
   description: string;
 
   @Column()
   giverId: number;
+
+  @Column({ nullable: true })
+  takerId: number;
 
   @CreateDateColumn()
   createdAt: Date;

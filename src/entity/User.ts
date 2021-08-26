@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToMany,
 } from "typeorm";
 import { Item } from "./Item";
 
@@ -37,6 +38,17 @@ export class User extends BaseEntity {
     cascade: true,
   })
   gave: Item[];
+
+  @OneToMany(() => Item, (item) => item.taker, {
+    nullable: true,
+    cascade: true,
+  })
+  taken: Item[];
+
+  @ManyToMany(() => Item, (item) => item.wishers, {
+    nullable: true,
+  })
+  wishes: Item[];
 
   @Column({ name: "active", default: true })
   active: boolean;

@@ -15,7 +15,10 @@ export const userResolvers = {
     getUser: async (_: any, args: { id: number }) => {
       // if (!context.isAuth) throw new Error("Unauthorized!");
       const { id } = args;
-      return await User.findOne({ relations: ["gave"], where: { id } });
+      return await User.findOne({
+        relations: ["gave", "taken"],
+        where: { id },
+      });
     },
   },
   Mutation: {

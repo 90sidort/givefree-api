@@ -7,6 +7,8 @@ import { userTypeDefs } from "./defTypes/userTypes";
 import { itemResolvers } from "./resolvers/itemResolver";
 import { uploadResolvers } from "./resolvers/imageResolver";
 import { userResolvers } from "./resolvers/userResolver";
+import { wishlistTypeDefs } from "./defTypes/wishlistTypes";
+import { wishlistResolvers } from "./resolvers/wishlistResolver";
 
 const Query = `
   scalar FileUpload
@@ -24,6 +26,19 @@ const Mutation = `
 const resolvers = {};
 
 export const schema = makeExecutableSchema({
-  typeDefs: [Query, Mutation, userTypeDefs, itemTypeDefs, uploadTypeDefs],
-  resolvers: merge(resolvers, userResolvers, itemResolvers, uploadResolvers),
+  typeDefs: [
+    Query,
+    Mutation,
+    userTypeDefs,
+    itemTypeDefs,
+    uploadTypeDefs,
+    wishlistTypeDefs,
+  ],
+  resolvers: merge(
+    resolvers,
+    userResolvers,
+    itemResolvers,
+    uploadResolvers,
+    wishlistResolvers
+  ),
 });

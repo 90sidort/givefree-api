@@ -30,9 +30,11 @@ export const wishlistResolvers = {
     },
   },
   Mutation: {
-    addToWishlist: async (_: any, args: { userId: number; itemId: number }) => {
+    addToWishlist: async (_: any, args: { itemId: number }, ctx: any) => {
       try {
-        const { userId, itemId } = args;
+        const userId = ctx?.req?.userId;
+        if (!userId) throw new Error("Unauthorized!");
+        const { itemId } = args;
         const item = await Item.findOne(itemId, { relations: ["wishers"] });
         if (!item) throw new Error("Item not found!");
         if (item.status !== "ongoing") throw new Error("Item not for grabs!");
@@ -53,12 +55,11 @@ export const wishlistResolvers = {
         throw new Error(err ? err : "Server error!");
       }
     },
-    removeFromWishlist: async (
-      _: any,
-      args: { userId: number; itemId: number }
-    ) => {
+    removeFromWishlist: async (_: any, args: { itemId: number }, ctx: any) => {
       try {
-        const { userId, itemId } = args;
+        const userId = ctx?.req?.userId;
+        if (!userId) throw new Error("Unauthorized!");
+        const { itemId } = args;
         const item = await Item.findOne(itemId, { relations: ["wishers"] });
         if (!item) throw new Error("Item not found!");
         const user = await User.findOne(userId);

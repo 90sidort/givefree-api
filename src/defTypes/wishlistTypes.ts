@@ -6,8 +6,8 @@ export const wishlistTypeDefs = gql`
     getWishers(itemId: Int!): [User]
   }
   extend type Mutation {
-    addToWishlist(userId: Int!, itemId: Int!): Boolean!
-    removeFromWishlist(userId: Int!, itemId: Int!): Boolean!
+    addToWishlist(itemId: Int!): Boolean!
+    removeFromWishlist(itemId: Int!): Boolean!
     giveItem(userId: Int!, itemId: Int): Boolean!
   }
 `;

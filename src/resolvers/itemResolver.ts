@@ -35,10 +35,10 @@ export const itemResolvers = {
           .take(first || undefined)
           .leftJoinAndSelect("item.giver", "giver")
           .leftJoinAndSelect("item.images", "image")
-          .andWhere("LOWER(item.name) like LOWER(:name)", {
+          .orWhere("LOWER(item.name) like LOWER(:name)", {
             name: `%${name}%`,
           })
-          .andWhere("LOWER(item.description) like LOWER(:description)", {
+          .orWhere("LOWER(item.description) like LOWER(:description)", {
             description: `%${description}%`,
           })
           .getMany();

@@ -40,7 +40,8 @@ export const itemResolvers = {
           })
           .andWhere("LOWER(item.description) like LOWER(:description)", {
             description: `%${description}%`,
-          });
+          })
+          .getMany();
         if (!items) throw new Error("Items not found");
         return items;
       } catch (err) {

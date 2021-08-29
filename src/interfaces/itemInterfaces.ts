@@ -13,3 +13,11 @@ export interface ItemCreate extends ItemUpdate {
   name: string;
   category: CategoryEnum;
 }
+
+export interface ItemSearch {
+  skip?: number;
+  first?: number;
+  status?: string;
+  name?: string;
+  description?: string;
+}

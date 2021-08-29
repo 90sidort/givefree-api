@@ -1,7 +1,11 @@
 import { getConnection } from "typeorm";
 
 import { Item } from "../entity/Item";
-import { ItemCreate, ItemUpdate } from "../interfaces/itemInterfaces";
+import {
+  ItemCreate,
+  ItemSearch,
+  ItemUpdate,
+} from "../interfaces/itemInterfaces";
 import { CategoryEnum, StatusEnum, StateEnum } from "../interfaces/enums";
 import { Image } from "../entity/Image";
 import { fileSaver } from "../utils/saveFile";
@@ -21,19 +25,22 @@ export const itemResolvers = {
         throw new Error(`Server error!`);
       }
     },
-    getItems: async (
-      _: any,
-      args: { skip: number; first: number; status: string }
-    ) => {
+    getItems: async (_: any, args: ItemSearch) => {
       // if (!context.isAuth) throw new Error("Unauthorized!");
-      const { skip, first } = args;
+      const { skip, first, name = "", description = "" } = args;
       try {
-        const items = await Item.find({
-          skip: skip || undefined,
-          take: first || undefined,
-          order: { updatedAt: "DESC" },
-          relations: ["images", "giver"],
-        });
+        const items = await Item.createQueryBuilder("item")
+          .orderBy("item.updatedAt", "DESC")
+          .skip(skip || undefined)
+          .take(first || undefined)
+          .leftJoinAndSelect("item.giver", "giver")
+          .leftJoinAndSelect("item.images", "image")
+          .andWhere("LOWER(item.name) like LOWER(:name)", {
+            name: `%${name}%`,
+          })
+          .andWhere("LOWER(item.description) like LOWER(:description)", {
+            description: `%${description}%`,
+          });
         if (!items) throw new Error("Items not found");
         return items;
       } catch (err) {

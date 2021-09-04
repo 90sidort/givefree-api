@@ -6,6 +6,19 @@ import { StatusEnum } from "../interfaces/enums";
 
 export const wishlistResolvers = {
   Query: {
+    getTakenGiven: async (_: any, args: { userId: number; taken: boolean }) => {
+      const { userId, taken } = args;
+      try {
+        let userTakenGiven;
+        if (taken)
+          userTakenGiven = User.findOne(userId, { relations: ["taken"] });
+        else userTakenGiven = User.findOne(userId, { relations: ["gave"] });
+        if (!userTakenGiven) throw new Error("User not found!");
+        return userTakenGiven;
+      } catch (err) {
+        throw new Error(err ? err : "Server error!");
+      }
+    },
     getWishlist: async (_: any, args: { userId: number }) => {
       const { userId } = args;
       try {

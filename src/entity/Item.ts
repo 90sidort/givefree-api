@@ -20,7 +20,7 @@ export class Item extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: "name", length: 400 })
+  @Column({ name: "name", length: 400, nullable: false })
   name: string;
 
   @Column({ name: "active", default: true })
@@ -28,7 +28,7 @@ export class Item extends BaseEntity {
 
   @Column("enum", {
     enum: StatusEnum,
-    default: StatusEnum.DRAFT,
+    default: StatusEnum.ONGOING,
   })
   status: StatusEnum;
 

@@ -22,33 +22,38 @@ export const itemResolvers = {
         if (!item) throw new Error("Item not found");
         return item;
       } catch (err) {
-        throw new Error(`Server error!`);
+        throw new Error(err ? err : "Server error!");
       }
     },
     getItems: async (_: any, args: ItemSearch) => {
       // if (!context.isAuth) throw new Error("Unauthorized!");
-      const { skip, first, name = "", description = "" } = args;
+      const { skip, first, name, status } = args;
       try {
-        const items = await Item.createQueryBuilder("item")
+        const base = Item.createQueryBuilder("item")
           .orderBy("item.updatedAt", "DESC")
           .skip(skip || undefined)
           .take(first || undefined)
           .leftJoinAndSelect("item.giver", "giver")
-          .leftJoinAndSelect("item.images", "image")
-          .orWhere("LOWER(item.name) like LOWER(:name)", {
+          .leftJoinAndSelect("item.images", "image");
+        if (status) {
+          base.andWhere("item.status = :status", {
+            status: status.toLowerCase(),
+          });
+        }
+        if (name) {
+          base.andWhere("LOWER(item.name) like LOWER(:name)", {
             name: `%${name}%`,
-          })
-          .orWhere("LOWER(item.description) like LOWER(:description)", {
-            description: `%${description}%`,
-          })
-          .getMany();
-        if (!items) throw new Error("Items not found");
+          });
+        }
+        const items = await base.getMany();
         return items;
       } catch (err) {
-        throw new Error(`Server error!`);
+        throw new Error(err ? err : "Server error!");
       }
     },
-    countItems: async (_: any) => {
+    countItems: async (_: any, args: { status: StatusEnum }) => {
+      const { status } = args;
+      if (status) return await Item.count({ where: { status } });
       return await Item.count();
     },
   },
@@ -59,6 +64,7 @@ export const itemResolvers = {
       const { name, active, status, state, category, description, giverId } =
         item;
       try {
+        if (!name || !giverId) throw new Error("Provide missing data!");
         const item = Item.create({
           name,
           active,
@@ -85,7 +91,7 @@ export const itemResolvers = {
         }
         return item;
       } catch (err) {
-        throw new Error(`Server error!`);
+        throw new Error(err ? err : "Server error!");
       }
     },
     updateItem: async (_: any, args: { id: number; item: ItemUpdate }) => {
@@ -105,7 +111,7 @@ export const itemResolvers = {
         await updateItem.save();
         return updateItem;
       } catch (err) {
-        throw new Error(`Server error!`);
+        throw new Error(err ? err : "Server error!");
       }
     },
     deleteItem: async (_: any, args: { id: number }) => {
@@ -119,7 +125,7 @@ export const itemResolvers = {
         await deleteItem.remove();
         return returnItem;
       } catch (err) {
-        throw new Error(`Server error!`);
+        throw new Error(err ? err : "Server error!");
       }
     },
   },

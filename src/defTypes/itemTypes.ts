@@ -2,14 +2,8 @@ import { gql } from "apollo-server-express";
 
 export const itemTypeDefs = gql`
   extend type Query {
-    getItems(
-      skip: Int
-      first: Int
-      status: String
-      name: String
-      description: String
-    ): [Item]!
-    countItems: Int!
+    getItems(skip: Int, first: Int, status: StatusEnum, name: String): [Item]!
+    countItems(status: StatusEnum): Int!
     getItem(id: Int!): Item!
   }
   extend type Mutation {

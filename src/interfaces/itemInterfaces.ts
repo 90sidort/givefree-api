@@ -19,5 +19,4 @@ export interface ItemSearch {
   first?: number;
   status?: string;
   name?: string;
-  description?: string;
 }

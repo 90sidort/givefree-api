@@ -51,10 +51,20 @@ export const itemResolvers = {
         throw new Error(err ? err : "Server error!");
       }
     },
-    countItems: async (_: any, args: { status: StatusEnum }) => {
-      const { status } = args;
-      if (status) return await Item.count({ where: { status } });
-      return await Item.count();
+    countItems: async (
+      _: any,
+      args: { status: StatusEnum; takerId?: number }
+    ) => {
+      const { status, takerId } = args;
+      try {
+        if (status === StatusEnum.ONGOING)
+          return await Item.count({ where: { status } });
+        else if (status === StatusEnum.GIVEN)
+          return await Item.count({ where: { status, takerId } });
+        return await Item.count();
+      } catch (err) {
+        throw new Error(err ? err : "Server error!");
+      }
     },
   },
   Mutation: {

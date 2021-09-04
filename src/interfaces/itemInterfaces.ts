@@ -20,3 +20,9 @@ export interface ItemSearch {
   status?: string;
   name?: string;
 }
+
+export interface TakenItems {
+  userId: number;
+  skip?: number;
+  first?: number;
+}

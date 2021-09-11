@@ -18,6 +18,7 @@ export const itemResolvers = {
     getItems: getItemsQuery,
     getTaken: getItemsQuery,
     getGiven: getItemsQuery,
+    getGiving: getItemsQuery,
     countItems: countItemsQuery,
   },
   Mutation: {

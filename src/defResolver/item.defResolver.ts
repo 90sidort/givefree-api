@@ -23,6 +23,8 @@ export const getItemsQuery = async (_: any, args: ItemSearch) => {
   const {
     input: { skip, first, name, status, userId, taken },
   } = args;
+  console.log(userId);
+
   try {
     const base = Item.createQueryBuilder("item")
       .orderBy("item.updatedAt", "DESC")
@@ -38,6 +40,8 @@ export const getItemsQuery = async (_: any, args: ItemSearch) => {
       base.andWhere("LOWER(item.name) like LOWER(:name)", {
         name: `%${name}%`,
       });
+    if (userId && taken === undefined)
+      base.andWhere("item.giverId = :giverId", { giverId: userId });
     if (userId && taken === true)
       base.andWhere("item.takerId = :takerId", { takerId: userId });
     if (userId && taken === false)
@@ -60,6 +64,15 @@ export const countItemsQuery = async (_: any, args: ItemCount) => {
       return await Item.count({ where: { status, takerId } });
     else if (status === StatusEnum.GIVEN && taken === false)
       return await Item.count({ where: { status, giverId: takerId } });
+    else if (status !== StatusEnum.GIVEN && takerId) {
+      const drafts = await Item.count({
+        where: { status: StatusEnum.DRAFT, giverId: takerId },
+      });
+      const ongoing = await Item.count({
+        where: { status: StatusEnum.ONGOING, giverId: takerId },
+      });
+      return drafts + ongoing;
+    }
     return await Item.count();
   } catch (err) {
     throw new Error(err ? err : "Server error!");

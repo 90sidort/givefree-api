@@ -5,6 +5,7 @@ export const itemTypeDefs = gql`
     getItems(input: ItemSearchInput!): [Item]!
     getTaken(input: ItemSearchInput!): [Item]!
     getGiven(input: ItemSearchInput!): [Item]!
+    getGiving(input: ItemSearchInput!): [Item]!
     countItems(input: ItemCountInput!): Int!
     getItem(id: Int!): Item!
   }

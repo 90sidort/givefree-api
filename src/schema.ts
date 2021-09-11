@@ -9,8 +9,6 @@ import { uploadResolvers } from "./resolvers/imageResolver";
 import { userResolvers } from "./resolvers/userResolver";
 import { wishlistTypeDefs } from "./defTypes/wishlistTypes";
 import { wishlistResolvers } from "./resolvers/wishlistResolver";
-import { historyTypeDefs } from "./defTypes/historyTypes";
-import { historyResolvers } from "./resolvers/historyResolver";
 
 const Query = `
   scalar FileUpload
@@ -35,14 +33,12 @@ export const schema = makeExecutableSchema({
     itemTypeDefs,
     uploadTypeDefs,
     wishlistTypeDefs,
-    historyTypeDefs,
   ],
   resolvers: merge(
     resolvers,
     userResolvers,
     itemResolvers,
     uploadResolvers,
-    wishlistResolvers,
-    historyResolvers
+    wishlistResolvers
   ),
 });

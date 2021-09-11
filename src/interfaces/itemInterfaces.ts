@@ -15,14 +15,12 @@ export interface ItemCreate extends ItemUpdate {
 }
 
 export interface ItemSearch {
-  skip?: number;
-  first?: number;
-  status?: string;
-  name?: string;
-}
-
-export interface TakenItems {
-  userId: number;
-  skip?: number;
-  first?: number;
+  input: {
+    skip?: number;
+    first?: number;
+    status?: string;
+    name?: string;
+    userId?: number;
+    taken?: boolean;
+  };
 }

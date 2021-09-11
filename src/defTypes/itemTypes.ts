@@ -2,7 +2,9 @@ import { gql } from "apollo-server-express";
 
 export const itemTypeDefs = gql`
   extend type Query {
-    getItems(skip: Int, first: Int, status: StatusEnum, name: String): [Item]!
+    getItems(input: ItemSearchInput!): [Item]!
+    getTaken(input: ItemSearchInput!): [Item]!
+    getGiven(input: ItemSearchInput!): [Item]!
     countItems(status: StatusEnum, takerId: Int): Int!
     getItem(id: Int!): Item!
   }
@@ -22,6 +24,14 @@ export const itemTypeDefs = gql`
     giverId: Int!
     description: String
     images: [File]
+  }
+  input ItemSearchInput {
+    skip: Int
+    first: Int
+    status: StatusEnum
+    name: String
+    userId: Int
+    taken: Boolean
   }
   input ItemInput {
     name: String!

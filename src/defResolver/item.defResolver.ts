@@ -1,7 +1,7 @@
 import { getConnection } from "typeorm";
 
 import { Item } from "../entity/Item";
-import { ItemSearch } from "../interfaces/itemInterfaces";
+import { ItemCount, ItemSearch } from "../interfaces/itemInterfaces";
 import { ItemCreate, ItemUpdate } from "../interfaces/itemInterfaces";
 import { StatusEnum } from "../interfaces/enums";
 import { Image } from "../entity/Image";
@@ -49,16 +49,17 @@ export const getItemsQuery = async (_: any, args: ItemSearch) => {
   }
 };
 
-export const countItemsQuery = async (
-  _: any,
-  args: { status: StatusEnum; takerId?: number }
-) => {
-  const { status, takerId } = args;
+export const countItemsQuery = async (_: any, args: ItemCount) => {
+  const {
+    input: { status, takerId, taken },
+  } = args;
   try {
     if (status === StatusEnum.ONGOING)
       return await Item.count({ where: { status } });
-    else if (status === StatusEnum.GIVEN)
+    else if (status === StatusEnum.GIVEN && taken === true)
       return await Item.count({ where: { status, takerId } });
+    else if (status === StatusEnum.GIVEN && taken === false)
+      return await Item.count({ where: { status, giverId: takerId } });
     return await Item.count();
   } catch (err) {
     throw new Error(err ? err : "Server error!");

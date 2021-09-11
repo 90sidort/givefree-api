@@ -5,7 +5,7 @@ export const itemTypeDefs = gql`
     getItems(input: ItemSearchInput!): [Item]!
     getTaken(input: ItemSearchInput!): [Item]!
     getGiven(input: ItemSearchInput!): [Item]!
-    countItems(status: StatusEnum, takerId: Int): Int!
+    countItems(input: ItemCountInput!): Int!
     getItem(id: Int!): Item!
   }
   extend type Mutation {
@@ -31,6 +31,11 @@ export const itemTypeDefs = gql`
     status: StatusEnum
     name: String
     userId: Int
+    taken: Boolean
+  }
+  input ItemCountInput {
+    status: StatusEnum!
+    takerId: Int
     taken: Boolean
   }
   input ItemInput {

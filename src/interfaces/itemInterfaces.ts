@@ -14,6 +14,14 @@ export interface ItemCreate extends ItemUpdate {
   category: CategoryEnum;
 }
 
+export interface ItemCount {
+  input: {
+    status: StatusEnum;
+    takerId?: number;
+    taken?: boolean;
+  };
+}
+
 export interface ItemSearch {
   input: {
     skip?: number;

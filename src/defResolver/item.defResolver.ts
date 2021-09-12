@@ -21,10 +21,8 @@ export const getItemQuery = async (_: any, args: { id: number }) => {
 export const getItemsQuery = async (_: any, args: ItemSearch) => {
   // if (!context.isAuth) throw new Error("Unauthorized!");
   const {
-    input: { skip, first, name, status, userId, taken },
+    input: { skip, first, name, userId, view },
   } = args;
-  console.log(userId);
-
   try {
     const base = Item.createQueryBuilder("item")
       .orderBy("item.updatedAt", "DESC")
@@ -32,20 +30,36 @@ export const getItemsQuery = async (_: any, args: ItemSearch) => {
       .take(first || undefined)
       .leftJoinAndSelect("item.giver", "giver")
       .leftJoinAndSelect("item.images", "image");
-    if (status)
+    if (view === "items")
       base.andWhere("item.status = :status", {
-        status: status.toLowerCase(),
+        status: StatusEnum.ONGOING,
       });
-    if (name)
+    if (name) {
       base.andWhere("LOWER(item.name) like LOWER(:name)", {
         name: `%${name}%`,
       });
-    if (userId && taken === undefined)
+      base.andWhere("item.status = :status", {
+        status: StatusEnum.ONGOING,
+      });
+    }
+    if (view === "giving") {
       base.andWhere("item.giverId = :giverId", { giverId: userId });
-    if (userId && taken === true)
+      base.andWhere("item.status != :status", {
+        status: StatusEnum.GIVEN,
+      });
+    }
+    if (view === "taken") {
+      base.andWhere("item.status = :status", {
+        status: StatusEnum.GIVEN,
+      });
       base.andWhere("item.takerId = :takerId", { takerId: userId });
-    if (userId && taken === false)
+    }
+    if (view === "given") {
       base.andWhere("item.giverId = :giverId", { giverId: userId });
+      base.andWhere("item.status = :status", {
+        status: StatusEnum.GIVEN,
+      });
+    }
     const items = await base.getMany();
     return items;
   } catch (err) {
@@ -55,16 +69,18 @@ export const getItemsQuery = async (_: any, args: ItemSearch) => {
 
 export const countItemsQuery = async (_: any, args: ItemCount) => {
   const {
-    input: { status, takerId, taken },
+    input: { takerId, view },
   } = args;
   try {
-    if (status === StatusEnum.ONGOING)
-      return await Item.count({ where: { status } });
-    else if (status === StatusEnum.GIVEN && taken === true)
-      return await Item.count({ where: { status, takerId } });
-    else if (status === StatusEnum.GIVEN && taken === false)
-      return await Item.count({ where: { status, giverId: takerId } });
-    else if (status !== StatusEnum.GIVEN && takerId) {
+    if (view === "items")
+      return await Item.count({ where: { status: StatusEnum.ONGOING } });
+    else if (view === "taken")
+      return await Item.count({ where: { status: StatusEnum.GIVEN, takerId } });
+    else if (view === "given")
+      return await Item.count({
+        where: { status: StatusEnum.GIVEN, giverId: takerId },
+      });
+    else if (view === "giving") {
       const drafts = await Item.count({
         where: { status: StatusEnum.DRAFT, giverId: takerId },
       });

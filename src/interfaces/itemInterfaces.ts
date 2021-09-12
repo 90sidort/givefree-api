@@ -19,6 +19,7 @@ export interface ItemCount {
     status: StatusEnum;
     takerId?: number;
     taken?: boolean;
+    view?: string;
   };
 }
 
@@ -30,5 +31,6 @@ export interface ItemSearch {
     name?: string;
     userId?: number;
     taken?: boolean;
+    view?: string;
   };
 }

@@ -29,15 +29,13 @@ export const itemTypeDefs = gql`
   input ItemSearchInput {
     skip: Int
     first: Int
-    status: StatusEnum
     name: String
     userId: Int
-    taken: Boolean
+    view: String
   }
   input ItemCountInput {
-    status: StatusEnum!
     takerId: Int
-    taken: Boolean
+    view: String
   }
   input ItemInput {
     name: String!

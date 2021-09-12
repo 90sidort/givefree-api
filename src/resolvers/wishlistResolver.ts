@@ -18,9 +18,10 @@ export const wishlistResolvers = {
         throw new Error(err ? err : "Server error!");
       }
     },
-    getWishers: async (_: any, args: { itemId: number }) => {
+    getWishers: async (_: any, args: { itemId?: number }) => {
       const { itemId } = args;
       try {
+        if (!itemId) return [];
         const wishers = await Item.findOne(itemId, { relations: ["wishers"] });
         if (!wishers) throw new Error("User not found!");
         return wishers.wishers;

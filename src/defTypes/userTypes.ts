@@ -6,6 +6,14 @@ export const userTypeDefs = gql`
     getUser(id: Int!): User
   }
   extend type Mutation {
+    updateUser(
+      id: Int!
+      name: String
+      surname: String
+      newEmail: String
+      about: String
+      active: Boolean
+    ): User!
     signupUser(
       username: String!
       name: String!

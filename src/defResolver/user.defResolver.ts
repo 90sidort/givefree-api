@@ -2,7 +2,7 @@ import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 
 import { User } from "../entity/User";
-import { SignIn, SignUp } from "../interfaces/signInterfaces";
+import { SignIn, SignUp, UpdateUser } from "../interfaces/signInterfaces";
 import { sendResetEmail } from "../utils/mail";
 
 export const meQuery = async (_: any, __: any, context: any) => {
@@ -96,6 +96,26 @@ export const signoutMutation = async (_: any, __: any, context: any) => {
     throw new Error(err ? err : "Server error!");
   }
   return true;
+};
+export const updateUserMutation = async (_: any, args: UpdateUser) => {
+  try {
+    const { id, name, surname, newEmail, active, about } = args;
+    const user = await User.findOne(id);
+    if (!user) throw new Error("User not found!");
+    if (name) user.name = name;
+    if (surname) user.surname = surname;
+    if (newEmail) {
+      const emailCheck = await User.findOne({ email: newEmail });
+      if (emailCheck) throw new Error(`Email ${newEmail} already taken!`);
+      user.email = newEmail;
+    }
+    if (active) user.active = active;
+    if (about) user.about = about;
+    await user.save();
+    return user;
+  } catch (err) {
+    throw new Error(err ? err : "Server error!");
+  }
 };
 export const signupUserMutation = async (
   _: any,

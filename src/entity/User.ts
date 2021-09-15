@@ -33,6 +33,9 @@ export class User extends BaseEntity {
   @Column({ name: "about", length: 2000, nullable: true })
   about: string;
 
+  @Column({ name: "phone_number", length: 2000, nullable: true })
+  phone_number: string;
+
   @OneToMany(() => Item, (item) => item.giver, {
     nullable: true,
     cascade: true,

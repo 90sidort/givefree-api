@@ -13,3 +13,12 @@ export interface SignUp {
   about?: string;
   active: boolean;
 }
+
+export interface UpdateUser {
+  id: number;
+  name?: string;
+  surname?: string;
+  newEmail?: string;
+  active?: boolean;
+  about?: string;
+}

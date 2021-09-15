@@ -6,6 +6,7 @@ import {
   signinUserMutation,
   signoutMutation,
   signupUserMutation,
+  updateUserMutation,
 } from "../defResolver/user.defResolver";
 
 export const userResolvers = {
@@ -17,6 +18,7 @@ export const userResolvers = {
     requestReset: requestResetMutation,
     resetPassword: resetPasswordMutation,
     signinUser: signinUserMutation,
+    updateUser: updateUserMutation,
     signout: signoutMutation,
     signupUser: signupUserMutation,
   },

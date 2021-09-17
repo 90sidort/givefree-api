@@ -9,4 +9,5 @@ images/*
 !images/.gitkeep
 !images/cheems_user.jpg
 !images/placeholder.jpg
+!images/load.gif
 .env

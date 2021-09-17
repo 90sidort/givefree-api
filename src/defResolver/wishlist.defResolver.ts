@@ -80,7 +80,7 @@ export const giveItemMutation = async (
       await transactionalEntityManager.save(item);
       await transactionalEntityManager.save(user);
     });
-    return true;
+    return item;
   } catch (err) {
     throw new Error(err ? err : "Server error!");
   }

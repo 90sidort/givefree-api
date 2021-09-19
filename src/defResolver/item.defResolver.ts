@@ -10,7 +10,9 @@ import { fileSaver } from "../utils/saveFile";
 export const getItemQuery = async (_: any, args: { id: number }) => {
   const { id } = args;
   try {
-    const item = await Item.findOne(id, { relations: ["images", "giver"] });
+    const item = await Item.findOne(id, {
+      relations: ["images", "giver", "wishers", "taker"],
+    });
     if (!item) throw new Error("Item not found");
     return item;
   } catch (err) {

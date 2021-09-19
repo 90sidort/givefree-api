@@ -24,7 +24,9 @@ export const itemTypeDefs = gql`
     giver: User!
     giverId: Int!
     description: String
+    wishers: [User]
     images: [File]
+    taker: User
   }
   input ItemSearchInput {
     skip: Int

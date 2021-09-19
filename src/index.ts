@@ -8,6 +8,7 @@ import { schema } from "./schema";
 import { isAuth } from "./middleware/authCookie";
 
 const startServer = async () => {
+  let retry = 5;
   const server = new ApolloServer({
     schema,
     formatError: (error) => {
@@ -17,7 +18,16 @@ const startServer = async () => {
     context: ({ req, res }: any) => ({ req, res }),
   });
 
-  await createConnection();
+  while (retry) {
+    try {
+      await createConnection();
+      break;
+    } catch (err) {
+      console.log(err);
+      retry = -1;
+      await new Promise((res) => setTimeout(res, 5000));
+    }
+  }
 
   const app = express();
   app.use(cookieParser());

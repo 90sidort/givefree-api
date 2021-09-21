@@ -10,4 +10,5 @@ images/*
 !images/cheems_user.jpg
 !images/placeholder.jpg
 !images/load.gif
-.env
+.env.dev
+.env.test

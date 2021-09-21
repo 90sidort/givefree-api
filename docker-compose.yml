@@ -18,8 +18,8 @@ services:
     depends_on:
       - postgres
     build: .
-    ports: 
-      - 8000:8000
+    ports:
+      - 4000:4000
     volumes:
       - .:/givefree-api
   adminer:

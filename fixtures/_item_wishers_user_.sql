@@ -1,0 +1,12 @@
+insert into "item_wishers_user" ("itemId", "userId") values (111, 11123);
+insert into "item_wishers_user" ("itemId", "userId") values (113, 11123);
+insert into "item_wishers_user" ("itemId", "userId") values (114, 11123);
+insert into "item_wishers_user" ("itemId", "userId") values (116, 11123);
+insert into "item_wishers_user" ("itemId", "userId") values (117, 11123);
+insert into "item_wishers_user" ("itemId", "userId") values (119, 11123);
+insert into "item_wishers_user" ("itemId", "userId") values (1110, 11123);
+insert into "item_wishers_user" ("itemId", "userId") values (11220, 11121);
+insert into "item_wishers_user" ("itemId", "userId") values (11220, 11119);
+insert into "item_wishers_user" ("itemId", "userId") values (11220, 11118);
+insert into "item_wishers_user" ("itemId", "userId") values (11220, 11117);
+insert into "item_wishers_user" ("itemId", "userId") values (11220, 11116);

@@ -10,6 +10,7 @@ const configPath = path.resolve(process.cwd(), `.env.${process.env.MODE}`);
 dotenv.config({ path: configPath });
 
 export const config: ConnectionOptions = {
+  name: "fixtures",
   type: "postgres",
   host: `${process.env.HOST_DB}`,
   port: `${process.env.PORT_DB}` as unknown as number,

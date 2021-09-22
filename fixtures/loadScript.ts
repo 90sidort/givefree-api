@@ -1,7 +1,7 @@
 import connectionTestMethods from "./../test/testServerMethods";
 import { config } from "../test/testServerConfig";
 
-const loadFixtures = async () => {
+export const loadFixtures = async () => {
   const connection = await connectionTestMethods.openDB(config);
   await connectionTestMethods.uploadFixture(connection, "_user_.sql");
   await connectionTestMethods.uploadFixture(connection, "_item_.sql");
@@ -14,4 +14,4 @@ const loadFixtures = async () => {
   await connection.close();
 };
 
-loadFixtures();
+// loadFixtures();

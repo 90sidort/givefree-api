@@ -4,6 +4,7 @@ import * as jwt from "jsonwebtoken";
 import { User } from "../entity/User";
 import { SignIn, SignUp, UpdateUser } from "../interfaces/signInterfaces";
 import { sendResetEmail } from "../utils/mail";
+import { validateUserCreate } from "../validation/userValidation";
 
 export const meQuery = async (_: any, __: any, context: any) => {
   const { req } = context;
@@ -122,10 +123,11 @@ export const signupUserMutation = async (
   args: SignUp,
   context: any
 ) => {
-  const { res } = context;
-  const { username, name, surname, email, password, about, active, retype } =
-    args;
   try {
+    const { res } = context;
+    validateUserCreate(args);
+    const { username, name, surname, email, password, about, active, retype } =
+      args;
     if (retype !== password) throw new Error("Passwords do not match!");
     const userEmailExists = await User.findOne({ where: { email } });
     const userUsernameExists = await User.findOne({ where: { username } });

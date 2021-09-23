@@ -1,6 +1,9 @@
 import * as nodemailer from "nodemailer";
 import * as dotenv from "dotenv";
-dotenv.config();
+import * as path from "path";
+
+const configPath = path.resolve(process.cwd(), `.env.${process.env.MODE}`);
+dotenv.config({ path: configPath });
 
 const transport = nodemailer.createTransport({
   host: process.env.EMAIL_HOST as string,

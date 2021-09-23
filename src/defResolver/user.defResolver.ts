@@ -131,8 +131,9 @@ export const signupUserMutation = async (
     if (retype !== password) throw new Error("Passwords do not match!");
     const userEmailExists = await User.findOne({ where: { email } });
     const userUsernameExists = await User.findOne({ where: { username } });
-    if (userEmailExists || userUsernameExists)
-      throw new Error(`User ${username} already exists!`);
+    if (userUsernameExists) throw new Error(`User ${username} already exists!`);
+    if (userEmailExists)
+      throw new Error(`User with email ${email} already exists!`);
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = User.create({
       username,

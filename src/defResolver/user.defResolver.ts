@@ -4,13 +4,14 @@ import * as jwt from "jsonwebtoken";
 import { User } from "../entity/User";
 import { SignIn, SignUp, UpdateUser } from "../interfaces/signInterfaces";
 import { sendResetEmail } from "../utils/mail";
-import { validateUserCreate } from "../validation/userValidation";
+import { validateUserCreate, validateResetPassword, validateUserUpdate } from "../validation/userValidation";
 
 export const meQuery = async (_: any, __: any, context: any) => {
   const { req } = context;
   if (!req.userId) return null;
   return await User.findOne(req.userId);
 };
+
 export const getUserQuery = async (_: any, args: { id: number }) => {
   // if (!context.isAuth) throw new Error("Unauthorized!");
   const { id } = args;
@@ -19,6 +20,7 @@ export const getUserQuery = async (_: any, args: { id: number }) => {
     where: { id },
   });
 };
+
 export const requestResetMutation = async (_: any, args: { email: string }) => {
   const { email } = args;
   try {
@@ -39,13 +41,14 @@ export const requestResetMutation = async (_: any, args: { email: string }) => {
     throw new Error(err ? err : "Server error!");
   }
 };
+
 export const resetPasswordMutation = async (
   _: any,
   args: { email: string; token: string; password: string; retype: string }
 ) => {
   try {
     const { email, token, password, retype } = args;
-    if (password !== retype) throw new Error(`Passwords do not match`);
+    validateResetPassword(password, retype)
     const match = jwt.verify(token, process.env.SECRET as string);
     if (!match) throw new Error(`Invalid token`);
     const user = await User.findOne({ where: { email } });
@@ -63,6 +66,7 @@ export const resetPasswordMutation = async (
     throw new Error(err ? err : "Server error!");
   }
 };
+
 export const signinUserMutation = async (
   _: any,
   args: SignIn,
@@ -89,6 +93,7 @@ export const signinUserMutation = async (
     throw new Error(err ? err : "Server error!");
   }
 };
+
 export const signoutMutation = async (_: any, __: any, context: any) => {
   const { res } = context;
   try {
@@ -98,8 +103,10 @@ export const signoutMutation = async (_: any, __: any, context: any) => {
   }
   return true;
 };
+
 export const updateUserMutation = async (_: any, args: UpdateUser) => {
   try {
+    validateUserUpdate(args)
     const { id, name, surname, newEmail, active, about } = args;
     const user = await User.findOne(id);
     if (!user) throw new Error("User not found!");
@@ -118,6 +125,7 @@ export const updateUserMutation = async (_: any, args: UpdateUser) => {
     throw new Error(err ? err : "Server error!");
   }
 };
+
 export const signupUserMutation = async (
   _: any,
   args: SignUp,
@@ -126,9 +134,8 @@ export const signupUserMutation = async (
   try {
     const { res } = context;
     validateUserCreate(args);
-    const { username, name, surname, email, password, about, active, retype } =
+    const { username, name, surname, email, password, about, active } =
       args;
-    if (retype !== password) throw new Error("Passwords do not match!");
     const userEmailExists = await User.findOne({ where: { email } });
     const userUsernameExists = await User.findOne({ where: { username } });
     if (userUsernameExists) throw new Error(`User ${username} already exists!`);

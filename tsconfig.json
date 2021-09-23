@@ -19,6 +19,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
+  "atom": {
+    "rewriteTsconfig": false,
+    "formatOnSave": true
+  },
   "exclude": ["node_modules"],
   "include": ["./src/**/*.tsx", "./src/**/*.ts"]
 }

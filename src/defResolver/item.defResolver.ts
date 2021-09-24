@@ -3,7 +3,7 @@ import { getConnection } from "typeorm";
 import { Item } from "../entity/Item";
 import { ItemCount, ItemSearch } from "../interfaces/itemInterfaces";
 import { ItemCreate, ItemUpdate } from "../interfaces/itemInterfaces";
-import { StatusEnum } from "../interfaces/enums";
+import { StatusEnum, CategoryEnum } from "../interfaces/enums";
 import { Image } from "../entity/Image";
 import { fileSaver } from "../utils/saveFile";
 
@@ -11,7 +11,7 @@ export const getItemQuery = async (_: any, args: { id: number }) => {
   const { id } = args;
   try {
     const item = await Item.findOne(id, {
-      relations: ["images", "giver", "wishers", "taker"],
+      relations: ["images", "giver", "wishers", "taker"]
     });
     if (!item) throw new Error("Item not found");
     return item;
@@ -23,7 +23,7 @@ export const getItemQuery = async (_: any, args: { id: number }) => {
 export const getItemsQuery = async (_: any, args: ItemSearch) => {
   // if (!context.isAuth) throw new Error("Unauthorized!");
   const {
-    input: { skip, first, name, userId, view },
+    input: { skip, first, name, userId, view, category = CategoryEnum.ALL }
   } = args;
   try {
     const base = Item.createQueryBuilder("item")
@@ -34,32 +34,37 @@ export const getItemsQuery = async (_: any, args: ItemSearch) => {
       .leftJoinAndSelect("item.images", "image");
     if (view === "items")
       base.andWhere("item.status = :status", {
-        status: StatusEnum.ONGOING,
+        status: StatusEnum.ONGOING
       });
     if (name) {
       base.andWhere("LOWER(item.name) like LOWER(:name)", {
-        name: `%${name}%`,
+        name: `%${name}%`
       });
       base.andWhere("item.status = :status", {
-        status: StatusEnum.ONGOING,
+        status: StatusEnum.ONGOING
+      });
+    }
+    if (category !== CategoryEnum.ALL) {
+      base.andWhere("item.category = :category", {
+        category: category
       });
     }
     if (view === "giving") {
       base.andWhere("item.giverId = :giverId", { giverId: userId });
       base.andWhere("item.status != :status", {
-        status: StatusEnum.GIVEN,
+        status: StatusEnum.GIVEN
       });
     }
     if (view === "taken") {
       base.andWhere("item.status = :status", {
-        status: StatusEnum.GIVEN,
+        status: StatusEnum.GIVEN
       });
       base.andWhere("item.takerId = :takerId", { takerId: userId });
     }
     if (view === "given") {
       base.andWhere("item.giverId = :giverId", { giverId: userId });
       base.andWhere("item.status = :status", {
-        status: StatusEnum.GIVEN,
+        status: StatusEnum.GIVEN
       });
     }
     const items = await base.getMany();
@@ -71,27 +76,30 @@ export const getItemsQuery = async (_: any, args: ItemSearch) => {
 
 export const countItemsQuery = async (_: any, args: ItemCount) => {
   const {
-    input: { takerId, view },
+    input: { takerId, view, category = CategoryEnum.ALL }
   } = args;
   try {
+    const base = Item.createQueryBuilder("item").select("COUNT(item)", "count");
     if (view === "items")
-      return await Item.count({ where: { status: StatusEnum.ONGOING } });
+      base.where("item.status = :status", { status: StatusEnum.ONGOING });
     else if (view === "taken")
-      return await Item.count({ where: { status: StatusEnum.GIVEN, takerId } });
+      base
+        .where("item.status = :status", { status: StatusEnum.GIVEN })
+        .andWhere("item.takerId = :takerId", { takerId });
     else if (view === "given")
-      return await Item.count({
-        where: { status: StatusEnum.GIVEN, giverId: takerId },
-      });
-    else if (view === "giving") {
-      const drafts = await Item.count({
-        where: { status: StatusEnum.DRAFT, giverId: takerId },
-      });
-      const ongoing = await Item.count({
-        where: { status: StatusEnum.ONGOING, giverId: takerId },
-      });
-      return drafts + ongoing;
-    }
-    return await Item.count();
+      base
+        .where("item.status = :status", { status: StatusEnum.GIVEN })
+        .andWhere("item.giverId = :giverId", { giverId: takerId });
+    else if (view === "giving")
+      base
+        .where("item.status != :status", {
+          status: StatusEnum.GIVEN
+        })
+        .andWhere("item.giverId = :giverId", { giverId: takerId });
+    if (category !== CategoryEnum.ALL)
+      base.andWhere("item.category = :category", { category });
+    const res = await base.getRawOne();
+    return res.count;
   } catch (err) {
     throw new Error(err ? err : "Server error!");
   }
@@ -152,15 +160,15 @@ export const addItemsMutation = async (
       state,
       category,
       description,
-      giverId,
+      giverId
     });
     if (file) {
-      await getConnection().transaction(async (transactionalEntityManager) => {
+      await getConnection().transaction(async transactionalEntityManager => {
         const imageUrl = await fileSaver(file);
         const savedItem = await transactionalEntityManager.save(item);
         const newImage = Image.create({
           url: imageUrl,
-          item: savedItem,
+          item: savedItem
         });
         await transactionalEntityManager.save(newImage);
       });

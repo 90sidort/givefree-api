@@ -34,10 +34,12 @@ export const itemTypeDefs = gql`
     name: String
     userId: Int
     view: String
+    category: CategoryEnum
   }
   input ItemCountInput {
     takerId: Int
     view: String
+    category: CategoryEnum
   }
   input ItemInput {
     name: String!
@@ -80,5 +82,6 @@ export const itemTypeDefs = gql`
     JEANS
     SOCKS
     SHORTS
+    ALL
   }
 `;

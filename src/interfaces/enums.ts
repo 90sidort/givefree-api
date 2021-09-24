@@ -2,7 +2,7 @@ export enum StateEnum {
   NEW = "new",
   GOOD = "good",
   DECENT = "decent",
-  BROKEN = "broken",
+  BROKEN = "broken"
 }
 
 export enum CategoryEnum {
@@ -18,10 +18,11 @@ export enum CategoryEnum {
   JEANS = "jeans",
   SOCKS = "socks",
   SHORTS = "shorts",
+  ALL = "all"
 }
 
 export enum StatusEnum {
   DRAFT = "draft",
   GIVEN = "given",
-  ONGOING = "ongoing",
+  ONGOING = "ongoing"
 }

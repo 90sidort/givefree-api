@@ -20,6 +20,7 @@ export interface ItemCount {
     takerId?: number;
     taken?: boolean;
     view?: string;
+    category?: CategoryEnum;
   };
 }
 
@@ -32,5 +33,6 @@ export interface ItemSearch {
     userId?: number;
     taken?: boolean;
     view?: string;
+    category?: CategoryEnum;
   };
 }

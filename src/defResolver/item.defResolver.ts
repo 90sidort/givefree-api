@@ -6,6 +6,7 @@ import { ItemCreate, ItemUpdate } from "../interfaces/itemInterfaces";
 import { StatusEnum, CategoryEnum } from "../interfaces/enums";
 import { Image } from "../entity/Image";
 import { fileSaver } from "../utils/saveFile";
+import { validateItemCreate } from "../validation/itemValidation";
 
 export const getItemQuery = async (_: any, args: { id: number }) => {
   const { id } = args;
@@ -150,6 +151,7 @@ export const addItemsMutation = async (
 ) => {
   if (!context.req.isAuth) throw new Error("Unauthorized! You need to log in!");
   const { item, file } = args;
+  validateItemCreate(item);
   const { name, active, status, state, category, description, giverId } = item;
   try {
     if (!name || !giverId) throw new Error("Provide missing data!");

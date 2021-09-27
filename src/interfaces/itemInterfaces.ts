@@ -12,6 +12,8 @@ export interface ItemCreate extends ItemUpdate {
   giverId: number;
   name: string;
   category: CategoryEnum;
+  status: StatusEnum;
+  state: StateEnum;
 }
 
 export interface ItemCount {

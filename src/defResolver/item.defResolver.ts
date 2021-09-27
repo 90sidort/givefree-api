@@ -21,7 +21,6 @@ export const getItemQuery = async (_: any, args: { id: number }) => {
 };
 
 export const getItemsQuery = async (_: any, args: ItemSearch) => {
-  // if (!context.isAuth) throw new Error("Unauthorized!");
   const {
     input: { skip, first, name, userId, view, category = CategoryEnum.ALL }
   } = args;
@@ -146,10 +145,11 @@ export const deleteItemQuery = async (_: any, args: { id: number }) => {
 
 export const addItemsMutation = async (
   _: any,
-  args: { item: ItemCreate; file: any }
+  args: { item: ItemCreate; file: any },
+  context: any
 ) => {
+  if (!context.req.isAuth) throw new Error("Unauthorized! You need to log in!");
   const { item, file } = args;
-  // if (!context.isAuth) throw new Error("Unauthorized!");
   const { name, active, status, state, category, description, giverId } = item;
   try {
     if (!name || !giverId) throw new Error("Provide missing data!");

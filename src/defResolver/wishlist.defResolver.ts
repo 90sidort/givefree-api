@@ -8,7 +8,7 @@ export const getWishlistQuery = async (_: any, args: { userId: number }) => {
   const { userId } = args;
   try {
     const wishlist = await User.findOne(userId, {
-      relations: ["wishes", "wishes.images"],
+      relations: ["wishes", "wishes.images"]
     });
     if (!wishlist) throw new Error("User not found!");
     return wishlist.wishes;
@@ -47,7 +47,7 @@ export const addToWishlistMutation = async (
       throw new Error("Cannot give item to yourself!");
     if (user.wishes.length >= 10)
       throw new Error("Can not have more than 10 items on wishlist!");
-    item.wishers.forEach((u) => {
+    item.wishers.forEach(u => {
       if (u.id === user.id)
         throw new Error("User already added this item to wishlist");
     });
@@ -61,12 +61,16 @@ export const addToWishlistMutation = async (
 
 export const giveItemMutation = async (
   _: any,
-  args: { userId: number; itemId: number }
+  args: { userId: number; itemId: number },
+  ctx: any
 ) => {
   try {
+    const loggedUser = ctx?.req?.userId;
+    if (!loggedUser) throw new Error("Unauthenticated!");
     const { userId, itemId } = args;
     const item = await Item.findOne(itemId, { relations: ["wishers"] });
     if (!item) throw new Error("Item not found!");
+    if (item.giverId !== loggedUser) throw new Error("Unauthorized!");
     if (item.status !== StatusEnum.ONGOING)
       throw new Error("Cannot give draft or already given item!");
     const user = await User.findOne(userId, { relations: ["taken"] });
@@ -76,7 +80,7 @@ export const giveItemMutation = async (
     item.wishers = [];
     item.status = StatusEnum.GIVEN;
     user.taken.push(item);
-    await getConnection().transaction(async (transactionalEntityManager) => {
+    await getConnection().transaction(async transactionalEntityManager => {
       await transactionalEntityManager.save(item);
       await transactionalEntityManager.save(user);
     });
@@ -99,7 +103,7 @@ export const removeFromWishlistMutation = async (
     if (!item) throw new Error("Item not found!");
     const user = await User.findOne(userId);
     if (!user) throw new Error("User not found!");
-    item.wishers = item.wishers.filter((u) => u.id !== user.id);
+    item.wishers = item.wishers.filter(u => u.id !== user.id);
     await item.save();
     return true;
   } catch (err) {

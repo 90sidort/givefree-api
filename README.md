@@ -1,4 +1,5 @@
 # Givefree backend
+Api for [frontend app](https://github.com/90sidort/givefree-ui). Api tests missing, will be added soon.  
 
 Steps to run this project:
 

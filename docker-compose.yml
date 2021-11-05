@@ -6,9 +6,9 @@ services:
     image: postgres:13.1
     restart: always
     environment:
-      - POSTGRES_DB=givefree_db
-      - POSTGRES_USER=givefreeadmin
-      - POSTGRES_PASSWORD=testtest2
+      - POSTGRES_MULTIPLE_DATABASES=$POSTGRES_MULTIPLE_DATABASES
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
     ports:
       - 5432:5432
     volumes:

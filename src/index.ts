@@ -6,6 +6,7 @@ import * as express from "express";
 import * as cookieParser from "cookie-parser";
 import { ApolloServer } from "apollo-server-express";
 
+import { config } from "./config";
 import { schema } from "./schema";
 import { isAuth } from "./middleware/authCookie";
 
@@ -25,7 +26,7 @@ const startServer = async () => {
 
   while (retry) {
     try {
-      await createConnection();
+      await createConnection(config);
       break;
     } catch (err) {
       console.log(err);

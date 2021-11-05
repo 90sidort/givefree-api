@@ -4,11 +4,11 @@ node_modules/
 build/
 tmp/
 temp/
-pg
+pg/data
 images/*
 !images/.gitkeep
 !images/cheems_user.jpg
 !images/placeholder.jpg
 !images/load.gif
-.env.dev
+.env
 .env.test

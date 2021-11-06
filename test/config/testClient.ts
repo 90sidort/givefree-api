@@ -1,9 +1,8 @@
-import { createTestClient } from "apollo-server-testing";
-import { ApolloServer } from "apollo-server-express";
+import { createTestClient } from "apollo-server-integration-testing";
 
-import { serverConfig } from "../../src/config/server";
+import server from "../../src/config/server";
 
-const testServer = new ApolloServer(serverConfig);
-const testClient = createTestClient(testServer as any);
+const testServer = server;
+const testClient = createTestClient({ apolloServer: testServer });
 
 export default testClient;

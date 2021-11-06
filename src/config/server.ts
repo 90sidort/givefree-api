@@ -7,7 +7,7 @@ const configPath = path.resolve(process.cwd(), `.env.${process.env.MODE}`);
 dotenv.config({ path: configPath });
 import app from "./app";
 
-export const serverConfig = {
+const serverConfig = {
   schema,
   formatError: (error) => {
     console.log(error);

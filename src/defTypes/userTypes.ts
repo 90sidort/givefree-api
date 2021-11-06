@@ -24,7 +24,7 @@ export const userTypeDefs = gql`
       active: Boolean
       retype: String!
     ): Boolean!
-    signinUser(password: String!, username: String!): Boolean!
+    signinUser(password: String!, username: String!): String!
     signout: Boolean!
     requestReset(email: String!): Boolean!
     resetPassword(

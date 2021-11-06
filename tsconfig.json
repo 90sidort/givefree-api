@@ -3,6 +3,7 @@
     "target": "es6",
     "module": "commonjs",
     "lib": ["dom", "es6", "es2017", "esnext.asynciterable"],
+    "strictNullChecks": false,
     "sourceMap": true,
     "outDir": "./dist",
     "moduleResolution": "node",
@@ -23,6 +24,6 @@
     "rewriteTsconfig": false,
     "formatOnSave": true
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "*.spec.ts"],
   "include": ["./src/**/*.tsx", "./src/**/*.ts"]
 }

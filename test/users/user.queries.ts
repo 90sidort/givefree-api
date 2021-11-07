@@ -5,7 +5,20 @@ query GET_USER($id: Int!) {
     name
     surname
     email
-    password
+    about
+    active
+  }
+}
+`;
+
+export const ME_QUERY = `
+query ME {
+  me {
+    username
+    id
+    name
+    surname
+    email
     about
     active
   }
@@ -15,5 +28,11 @@ query GET_USER($id: Int!) {
 export const SIGNIN = `
 mutation SIGNIN($password: String!, $username: String!) {
   signinUser(password:$password, username: $username)
+}
+`;
+
+export const REQUEST_RESET = `
+mutation RESET_REQUEST($email: String!) {
+  requestReset(email: $email)
 }
 `;

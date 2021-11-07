@@ -11,25 +11,37 @@ import {
 } from "../validation/userValidation";
 
 export const meQuery = async (_: any, __: any, context: any) => {
-  const { req } = context;
-  if (!req.userId) return null;
-  return await User.findOne(req.userId);
+  try {
+    const { req } = context;
+    if (!req.userId) throw new Error("User not logged in!");
+    return await User.findOne(req.userId);
+  } catch (err) {
+    throw new Error(err ? err : "Server error!");
+  }
 };
 
-export const getUserQuery = async (_: any, args: { id: number }) => {
-  // if (!context.isAuth) throw new Error("Unauthorized!");
-  const { id } = args;
-  const user = await User.findOne({
-    relations: ["gave", "taken"],
-    where: { id },
-  });
-  if (!user) throw new Error("User does not exist!");
-  return user;
+export const getUserQuery = async (
+  _: any,
+  args: { id: number },
+  context: any
+) => {
+  try {
+    if (!context.req.isAuth) throw new Error("Unauthorized!");
+    const { id } = args;
+    const user = await User.findOne({
+      relations: ["gave", "taken"],
+      where: { id },
+    });
+    if (!user) throw new Error("User does not exist!");
+    return user;
+  } catch (err) {
+    throw new Error(err ? err : "Server error!");
+  }
 };
 
 export const requestResetMutation = async (_: any, args: { email: string }) => {
-  const { email } = args;
   try {
+    const { email } = args;
     const user = await User.findOne({ where: { email } });
     if (!user) throw new Error(`User with email: ${email} does not exist!`);
     user.reset = true;

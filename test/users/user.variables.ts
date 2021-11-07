@@ -4,9 +4,20 @@ export const getUserObj = {
     name: "Yorgo",
     surname: "Doerr",
     email: "ydoerr0@ibm.com",
-    password: "$2b$12$71MfkIsU.2bWznbHpG03LOLQt52wcZNdvHSzHT5XCOKE9xBiFlEam",
     about:
       "Curabitur convallis. Duis consequat dui nec nisi volutpat eleifend.",
+    active: true,
+  },
+};
+
+export const getMeObj = {
+  me: {
+    username: "admin",
+    id: 11122,
+    name: "Admin",
+    surname: "Adminowicz",
+    email: "test@test.com",
+    about: "Hi! I am your admin.",
     active: true,
   },
 };

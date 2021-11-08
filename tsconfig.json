@@ -3,12 +3,13 @@
     "target": "es6",
     "module": "commonjs",
     "lib": ["dom", "es6", "es2017", "esnext.asynciterable"],
+    "strictNullChecks": false,
     "sourceMap": true,
     "outDir": "./dist",
     "moduleResolution": "node",
     "removeComments": true,
     "noImplicitAny": false,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "strictFunctionTypes": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
@@ -23,6 +24,6 @@
     "rewriteTsconfig": false,
     "formatOnSave": true
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "*.spec.ts"],
   "include": ["./src/**/*.tsx", "./src/**/*.ts"]
 }

@@ -177,7 +177,7 @@ export const signupUserMutation = async (
       }
     );
     res.cookie("token", token);
-    return true;
+    return token;
   } catch (err) {
     throw new Error(err ? err : "Server error!");
   }

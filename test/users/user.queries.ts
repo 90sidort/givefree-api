@@ -36,3 +36,25 @@ mutation RESET_REQUEST($email: String!) {
   requestReset(email: $email)
 }
 `;
+
+export const SIGNUP = `
+mutation SIGN_UP(
+  $username: String!
+  $name: String!
+  $surname: String!
+  $password: String!
+  $email: String!
+  $retype: String!
+  $about: String
+) {
+  signupUser(
+    username: $username
+    name: $name
+    surname: $surname
+    password: $password
+    retype: $retype
+    email: $email
+    about: $about
+  )
+}
+`;

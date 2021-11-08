@@ -26,3 +26,22 @@ export const loginInputObj = {
   username: "admin",
   password: "testtest2",
 };
+
+export const signupInputObj = {
+  username: "testuser2",
+  name: "Testowy",
+  surname: "User",
+  password: "testtest2",
+  retype: "testtest2",
+  email: "testowy2@user.com",
+  about: "test me babe",
+};
+
+export const userUpdInputObj = {
+  id: 111,
+  name: "correct",
+  surname: "very correct",
+  newEmail: "new@email.com",
+  about: "Yup, an update!",
+  active: true,
+};

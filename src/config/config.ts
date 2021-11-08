@@ -2,9 +2,9 @@ import * as path from "path";
 import * as dotenv from "dotenv";
 import { ConnectionOptions } from "typeorm";
 
-import { Image } from "./entity/Image";
-import { User } from "./entity/User";
-import { Item } from "./entity/Item";
+import { Image } from "../entity/Image";
+import { User } from "../entity/User";
+import { Item } from "../entity/Item";
 const pathEnv = process.env.MODE === "dev" ? ".env" : ".env.test";
 const configPath = path.resolve(process.cwd(), pathEnv);
 dotenv.config({ path: configPath });

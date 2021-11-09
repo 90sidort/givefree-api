@@ -44,7 +44,7 @@ describe("User tests without login", () => {
       .set("Accept", "application/json");
     expect(response.body.errors[0].message).toBe("Error: User not logged in!");
   });
-  it("Should return error in me query if userId is empty", async () => {
+  it("Should return error in get user query with no authorization", async () => {
     const response = await request
       .post("/graphql")
       .send({

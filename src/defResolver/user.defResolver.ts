@@ -90,8 +90,8 @@ export const signinUserMutation = async (
   args: SignIn,
   context: any
 ) => {
-  const { res } = context;
   try {
+    const { res } = context;
     const { username, password } = args;
     const user = await User.findOne({ where: { username } });
     if (!user) throw new Error(`User ${username} does not exist!`);
@@ -113,8 +113,8 @@ export const signinUserMutation = async (
 };
 
 export const signoutMutation = async (_: any, __: any, context: any) => {
-  const { res } = context;
   try {
+    const { res } = context;
     res.cookie("token", "deleted");
   } catch (err) {
     throw new Error(err ? err : "Server error!");
@@ -122,19 +122,25 @@ export const signoutMutation = async (_: any, __: any, context: any) => {
   return true;
 };
 
-export const updateUserMutation = async (_: any, args: UpdateUser) => {
+export const updateUserMutation = async (
+  _: any,
+  args: UpdateUser,
+  context: any
+) => {
   try {
-    validateUserUpdate(args);
+    const { req } = context;
     const { id, name, surname, newEmail, active, about } = args;
+    validateUserUpdate(args);
+    if (req.userId !== id) throw new Error("Cannot update other user account!");
     const user = await User.findOne(id);
     if (!user) throw new Error("User not found!");
-    if (name) user.name = name;
-    if (surname) user.surname = surname;
     if (newEmail) {
       const emailCheck = await User.findOne({ email: newEmail });
       if (emailCheck) throw new Error(`Email ${newEmail} already taken!`);
       user.email = newEmail;
     }
+    if (name) user.name = name;
+    if (surname) user.surname = surname;
     if (active) user.active = active;
     if (about) user.about = about;
     await user.save();

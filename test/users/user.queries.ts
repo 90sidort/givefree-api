@@ -11,6 +11,33 @@ query GET_USER($id: Int!) {
 }
 `;
 
+export const UPDATE_USER = `
+  mutation UPDATE_USER(
+    $id: Int!
+    $name: String
+    $surname: String
+    $active: Boolean
+    $newEmail: String
+    $about: String
+  ) {
+    updateUser(
+      id: $id
+      name: $name
+      surname: $surname
+      active: $active
+      newEmail: $newEmail
+      about: $about
+    ) {
+      id
+      name
+      surname
+      active
+      email
+      about
+    }
+  }
+`;
+
 export const ME_QUERY = `
 query ME {
   me {
@@ -57,4 +84,10 @@ mutation SIGN_UP(
     about: $about
   )
 }
+`;
+
+export const SIGN_OUT = `
+  mutation SIGN_OUT {
+    signout
+  }
 `;

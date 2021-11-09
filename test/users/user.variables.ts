@@ -22,9 +22,37 @@ export const getMeObj = {
   },
 };
 
+export const getAdminObj = {
+  username: "admin",
+  name: "Admin",
+  surname: "Adminowicz",
+  email: "test@test.com",
+  about: "Hi! I am your admin.",
+  active: true,
+};
+
 export const loginInputObj = {
   username: "admin",
   password: "testtest2",
+};
+
+export const updateUserObj = {
+  id: 11123,
+  name: "ChangedName",
+  surname: "ChangedSurname",
+  newEmail: "changed@email.com",
+  about: "Changed about description.",
+};
+
+export const updatedUserObj = {
+  updateUser: {
+    id: 11123,
+    name: "ChangedName",
+    surname: "ChangedSurname",
+    active: true,
+    email: "changed@email.com",
+    about: "Changed about description.",
+  },
 };
 
 export const signupInputObj = {

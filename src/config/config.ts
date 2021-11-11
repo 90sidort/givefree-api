@@ -18,5 +18,5 @@ export const config: ConnectionOptions = {
   database: `${process.env.POSTGRES_DB}`,
   entities: [User, Image, Item],
   synchronize: process.env.ENVIRONMENT === "production" ? false : true,
-  dropSchema: process.env.ENVIRONMENT !== "develop" ? true : false,
+  dropSchema: process.env.ENVIRONMENT === "test" ? true : false,
 };

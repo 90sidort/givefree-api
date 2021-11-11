@@ -1,3 +1,48 @@
+export const itemNew = {
+  item: {
+    name: "New Test Item",
+    giverId: 11123,
+    active: true,
+    status: "ONGOING",
+    state: "NEW",
+    category: "HOODIE",
+    description: "Very cool hoodie up for grabs!",
+  },
+};
+
+export const itemAdded = {
+  addItem: {
+    name: "New Test Item",
+    id: 1,
+    description: "Very cool hoodie up for grabs!",
+    category: "HOODIE",
+    images: null,
+  },
+};
+
+export const updateItemObj = {
+  id: 11217,
+  item: {
+    name: "Changed name",
+    description: "Change desc",
+    state: "GOOD",
+    category: "DRESS",
+  },
+};
+
+export const itemUpdated = {
+  updateItem: {
+    name: "Changed name",
+    id: 11217,
+  },
+};
+
+export const deletedItem = {
+  deleteItem: {
+    id: 11220,
+  },
+};
+
 export const item111 = {
   getItem: {
     name: "discrete",

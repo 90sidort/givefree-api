@@ -1,5 +1,5 @@
 import validator from "validator";
-import { ItemCreate } from "../interfaces/itemInterfaces";
+import { ItemCreate, ItemUpdate } from "../interfaces/itemInterfaces";
 
 const categoryEnums = [
   "other",
@@ -13,7 +13,7 @@ const categoryEnums = [
   "coat",
   "jeans",
   "socks",
-  "shorts"
+  "shorts",
 ];
 const stateEnums = ["new", "good", "decent", "broken"];
 const statusEnums = ["draft", "given", "ongoing"];
@@ -37,6 +37,31 @@ export const validateItemCreate = (input: ItemCreate) => {
     throw new Error(categoryItemError(category));
   if (!stateEnums.includes(state)) throw new Error(stateItemError(state));
   if (!statusEnums.includes(status)) throw new Error(statusItemError(status));
+  if (active !== undefined) {
+    if (typeof active !== "boolean") throw new Error(activeError);
+  }
+  if (description) {
+    if (!validator.isLength(description, { min: 5, max: 2000 }))
+      throw new Error(descriptionError);
+  }
+};
+
+export const validateItemUpdate = (input: ItemUpdate) => {
+  const { name, category, status, state, description, active } = input;
+  if (name) {
+    if (!validator.isLength(name, { min: 4, max: 400 }))
+      throw new Error(nameItemError(name));
+  }
+  if (category) {
+    if (!categoryEnums.includes(category))
+      throw new Error(categoryItemError(category));
+  }
+  if (status) {
+    if (!statusEnums.includes(status)) throw new Error(statusItemError(status));
+  }
+  if (state) {
+    if (!stateEnums.includes(state)) throw new Error(stateItemError(state));
+  }
   if (active !== undefined) {
     if (typeof active !== "boolean") throw new Error(activeError);
   }

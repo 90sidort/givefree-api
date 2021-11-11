@@ -4,7 +4,7 @@ import { config } from "../../src/config/config";
 import { loadFixtures } from "../../fixtures/loadScript";
 import connectionTestMethods from "../config/testServerMethods";
 import { SIGNIN } from "../users/user.queries";
-import { GET_ITEM, GET_ITEMS_SEARCH } from "./item.queries";
+import { GET_ITEM, GET_ITEMS_SEARCH, COUNT_ITEMS } from "./item.queries";
 import { loginInputObj } from "../users/user.variables";
 import {
   item111,
@@ -19,9 +19,8 @@ import app from "../../src/config/app";
 
 const request = supertest(app);
 
-describe("Item tests", () => {
+describe("Item read tests", () => {
   let tokenCookie: string = "";
-  // let norTokenCookie: string = "";
   beforeAll(async () => {
     const connection = await connectionTestMethods.openDB(config);
     await loadFixtures(connection);
@@ -32,15 +31,7 @@ describe("Item tests", () => {
         variables: { ...loginInputObj },
       })
       .set("Accept", "application/json");
-    // const responseNor = await request
-    //   .post("/graphql")
-    //   .send({
-    //     query: SIGNIN,
-    //     variables: { ...loginInputObj, username: "normal_user" },
-    //   })
-    //   .set("Accept", "application/json");
     tokenCookie = response.headers["set-cookie"][0].split(" Path=/")[0];
-    // norTokenCookie = responseNor.headers["set-cookie"][0].split(" Path=/")[0];
   });
   afterAll(async () => {
     await connectionTestMethods.closeDB();
@@ -124,5 +115,57 @@ describe("Item tests", () => {
       .set("Cookie", tokenCookie)
       .set("Accept", "application/json");
     expect(response.body.data.items).toHaveLength(0);
+  });
+  it("Should count items correctly (items view)", async () => {
+    const response = await request
+      .post("/graphql")
+      .send({
+        query: COUNT_ITEMS,
+        variables: {
+          input: { view: "items" },
+        },
+      })
+      .set("Cookie", tokenCookie)
+      .set("Accept", "application/json");
+    expect(response.body.data.countItems).toBe(86);
+  });
+  it("Should count items correctly (taken view)", async () => {
+    const response = await request
+      .post("/graphql")
+      .send({
+        query: COUNT_ITEMS,
+        variables: {
+          input: { view: "taken", takerId: 11123 },
+        },
+      })
+      .set("Cookie", tokenCookie)
+      .set("Accept", "application/json");
+    expect(response.body.data.countItems).toBe(20);
+  });
+  it("Should count items correctly (given view)", async () => {
+    const response = await request
+      .post("/graphql")
+      .send({
+        query: COUNT_ITEMS,
+        variables: {
+          input: { view: "given", takerId: 11123 },
+        },
+      })
+      .set("Cookie", tokenCookie)
+      .set("Accept", "application/json");
+    expect(response.body.data.countItems).toBe(20);
+  });
+  it("Should count items correctly (giving view)", async () => {
+    const response = await request
+      .post("/graphql")
+      .send({
+        query: COUNT_ITEMS,
+        variables: {
+          input: { view: "giving", takerId: 11123 },
+        },
+      })
+      .set("Cookie", tokenCookie)
+      .set("Accept", "application/json");
+    expect(response.body.data.countItems).toBe(20);
   });
 });

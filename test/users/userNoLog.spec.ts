@@ -54,7 +54,6 @@ describe("User tests without login", () => {
       .set("Accept", "application/json");
     expect(response.body.errors[0].message).toBe("Error: Unauthorized!");
   });
-
   it("Should not be able to request password reset for user that does not exist", async () => {
     const response = await request
       .post("/graphql")

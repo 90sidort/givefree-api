@@ -3,7 +3,7 @@
   "testTimeout": 30000,
   "rootDir": ".",
   "testEnvironment": "node",
-  "testRegex": "item.spec.ts$",
+  "testRegex": "itemCUD.spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   }

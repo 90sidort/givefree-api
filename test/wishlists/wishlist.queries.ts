@@ -27,3 +27,17 @@ export const ADD_ITEM_TO_WISHLIST = `
     addToWishlist(itemId: $itemId)
   }
 `;
+
+export const REMOVE_FROM_WISHLIST = `
+  mutation REMOVE_FROM_WISHLIST($itemId: Int!) {
+    removeFromWishlist(itemId: $itemId)
+  }
+`;
+
+export const GIVE_ITEM = `
+  mutation GIVE_ITEM($userId: Int!, $itemId: Int!) {
+    giveItem(userId: $userId, itemId: $itemId) {
+      id
+    }
+  }
+`;

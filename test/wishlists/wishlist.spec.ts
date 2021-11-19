@@ -8,6 +8,8 @@ import {
   GET_WISHLIST,
   GET_WISHERS,
   ADD_ITEM_TO_WISHLIST,
+  REMOVE_FROM_WISHLIST,
+  GIVE_ITEM,
 } from "./wishlist.queries";
 
 import app from "../../src/config/app";
@@ -195,5 +197,86 @@ describe("Wishlist tests", () => {
       .set("Cookie", tokenCookie)
       .set("Accept", "application/json");
     expect(response.body.errors[0].message).toBe("Error: Item not for grabs!");
+  });
+  it("Should be able to remove item from wishlist", async () => {
+    const response = await request
+      .post("/graphql")
+      .send({
+        query: REMOVE_FROM_WISHLIST,
+        variables: { itemId: 111 },
+      })
+      .set("Cookie", tokenCookie)
+      .set("Accept", "application/json");
+    expect(response.body.data).toMatchObject({ removeFromWishlist: true });
+  });
+  it("Should return error if item does not exist (when trying to remove it from wishlist)", async () => {
+    const response = await request
+      .post("/graphql")
+      .send({
+        query: REMOVE_FROM_WISHLIST,
+        variables: { itemId: 83 },
+      })
+      .set("Cookie", tokenCookie)
+      .set("Accept", "application/json");
+    expect(response.body.errors[0].message).toBe("Error: Item not found!");
+  });
+  it("Should not be able to give item that does not exist", async () => {
+    const response = await request
+      .post("/graphql")
+      .send({
+        query: GIVE_ITEM,
+        variables: { userId: 11119, itemId: 89 },
+      })
+      .set("Cookie", tokenCookie)
+      .set("Accept", "application/json");
+    expect(response.body.errors[0].message).toBe("Error: Item not found!");
+  });
+  it("Should not be able to give item to yourself", async () => {
+    const response = await request
+      .post("/graphql")
+      .send({
+        query: GIVE_ITEM,
+        variables: { userId: 11123, itemId: 11219 },
+      })
+      .set("Cookie", tokenCookie)
+      .set("Accept", "application/json");
+    expect(response.body.errors[0].message).toBe(
+      "Error: Cannot give item to yourself!"
+    );
+  });
+  it("Should not be able to give already given item", async () => {
+    const response = await request
+      .post("/graphql")
+      .send({
+        query: GIVE_ITEM,
+        variables: { userId: 11122, itemId: 11221 },
+      })
+      .set("Cookie", tokenCookie)
+      .set("Accept", "application/json");
+    expect(response.body.errors[0].message).toBe(
+      "Error: Cannot give draft or already given item!"
+    );
+  });
+  it("Should not be able to give item to user that does not exist", async () => {
+    const response = await request
+      .post("/graphql")
+      .send({
+        query: GIVE_ITEM,
+        variables: { userId: 89, itemId: 11220 },
+      })
+      .set("Cookie", tokenCookie)
+      .set("Accept", "application/json");
+    expect(response.body.errors[0].message).toBe("Error: User not found!");
+  });
+  it("Should be able to give item away", async () => {
+    const response = await request
+      .post("/graphql")
+      .send({
+        query: GIVE_ITEM,
+        variables: { userId: 11119, itemId: 11220 },
+      })
+      .set("Cookie", tokenCookie)
+      .set("Accept", "application/json");
+    expect(response.body.data).toMatchObject({ giveItem: { id: 11220 } });
   });
 });

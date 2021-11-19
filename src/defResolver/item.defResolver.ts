@@ -131,7 +131,7 @@ export const addItemsMutation = async (
     if (file) {
       await getConnection().transaction(async (transactionalEntityManager) => {
         const imageUrl = await fileSaver(file);
-        const savedItem = await transactionalEntityManager.save(item);
+        const savedItem = await transactionalEntityManager.save(itemNew);
         const newImage = Image.create({
           url: imageUrl,
           item: savedItem,
